@@ -52,4 +52,41 @@ public class Solution {
 		}
 		return rev == x;
 	}
+
+	// ********* Remove linked list element (Recursion is slow, use fake head to
+	// avoid edge cases in loop)
+	public class ListNode {
+		int val;
+		ListNode next;
+
+		ListNode(int x) {
+			val = x;
+		}
+	}
+
+	public ListNode removeElements(ListNode head, int val) {
+		if (head != null) {
+			if (head.val == val) {
+				head = removeElements(head.next, val);
+				// System.gc() delete head;
+			} else {
+				head.next = removeElements(head.next, val);
+			}
+			return head;
+		}
+		return null;
+		// *********Fake head solution
+		// ListNode dummy = new ListNode(0);
+		// dummy.next = head;
+		// ListNode cur = dummy;
+		//
+		// while(cur.next != null) {
+		// if(cur.next.val == val) {
+		// cur.next = cur.next.next;
+		// }
+		// else
+		// cur = cur.next;
+		// }
+		// return dummy.next;
+	}
 }
