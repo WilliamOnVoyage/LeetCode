@@ -1,10 +1,11 @@
 package Easy;
 
 public class Solution {
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		System.out.println("Leetcode practice");
 	}
+
 	// *********Reverse String
 	String reverseString(String s) {
 		String new_s = "";
@@ -37,5 +38,18 @@ public class Solution {
 			sum = sum ^ nums[i];
 		}
 		return sum & -1;
+	}
+
+	// ********* Palindrome number (digit operation)
+	public boolean isPalindrome(int x) {
+		if (x < 0)
+			return false;
+		int a = x;
+		int rev = 0;
+		while (a != 0) {
+			rev = 10 * rev + a % 10;
+			a /= 10;
+		}
+		return rev == x;
 	}
 }
