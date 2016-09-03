@@ -1,5 +1,8 @@
 package Easy;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 public class Solution {
 
 	public static void main(String[] args) {
@@ -127,28 +130,99 @@ public class Solution {
 		int left = maxDepth(root.left);
 		int right = maxDepth(root.right);
 		return 1 + (left > right ? left : right);
-		
-//		if(root == NULL)
-//	        return 0;
-//	    
-//	    int res = 0;
-//	    queue<TreeNode *> q;
-//	    q.push(root);
-//	    while(!q.empty())
-//	    {
-//	        ++ res;
-//	        for(int i = 0, n = q.size(); i < n; ++ i)
-//	        {
-//	            TreeNode *p = q.front();
-//	            q.pop();
-//	            
-//	            if(p -> left != NULL)
-//	                q.push(p -> left);
-//	            if(p -> right != NULL)
-//	                q.push(p -> right);
-//	        }
-//	    }
-//	    
-//	    return res;
+
+		// if(root == NULL)
+		// return 0;
+		//
+		// int res = 0;
+		// queue<TreeNode *> q;
+		// q.push(root);
+		// while(!q.empty())
+		// {
+		// ++ res;
+		// for(int i = 0, n = q.size(); i < n; ++ i)
+		// {
+		// TreeNode *p = q.front();
+		// q.pop();
+		//
+		// if(p -> left != NULL)
+		// q.push(p -> left);
+		// if(p -> right != NULL)
+		// q.push(p -> right);
+		// }
+		// }
+		//
+		// return res;
 	}
+
+	// ********* Min depth (leave nodes)
+	public int minDepth(TreeNode root) {
+		if (root == null)
+			return 0;
+		if (root.left == null)
+			return minDepth(root.right) + 1;
+		if (root.right == null)
+			return minDepth(root.left) + 1;
+		return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+	}
+
+	// ********* find the Difference (ASCII code, bit manipulation)
+	public char findTheDifference(String s, String t) {
+		char sum_s = 'a';
+		char sum_t = 'a';
+		int i = 0;
+		for (; i < s.length(); i++) {
+			sum_s += s.charAt(i);
+			sum_t += t.charAt(i);
+		}
+		sum_t += t.charAt(i);
+		return (char) (sum_t - sum_s);
+	}
+
+	// ********* Array intersection (HashSet is slow, memory inefficient)
+	public int[] intersection(int[] nums1, int[] nums2) {
+		HashSet<Integer> num1_list = new HashSet<Integer>();
+		HashSet<Integer> num2_list = new HashSet<Integer>();
+
+		HashSet<Integer> result_list = new HashSet<Integer>();
+		int[] intersect;
+
+		for (int i = 0; i < nums2.length; i++) {
+			num2_list.add(nums2[i]);
+		}
+		for (int i = 0; i < nums1.length; i++) {
+			num1_list.add(nums1[i]);
+		}
+		if (num1_list.size() > num2_list.size()) {
+			for (Integer j : num2_list) {
+				if (num1_list.contains(j))
+					result_list.add(j);
+			}
+			intersect = new int[result_list.size()];
+			int index = 0;
+			for (Integer j : result_list) {
+				intersect[index] = j;
+				index++;
+			}
+		} else {
+			for (Integer j : num1_list) {
+				if (num2_list.contains(j))
+					result_list.add(j);
+			}
+			intersect = new int[result_list.size()];
+			int index = 0;
+			for (Integer j : result_list) {
+				intersect[index] = j;
+				index++;
+			}
+		}
+
+		return intersect;
+		// **** Use stream (So slow!!!)
+		// Set<Integer> set =
+		// Arrays.stream(nums2).boxed().collect(Collectors.toSet());
+		// return Arrays.stream(nums1).distinct().filter(e->
+		// set.contains(e)).toArray();
+	}
+
 }
