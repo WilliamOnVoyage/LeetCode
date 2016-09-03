@@ -89,4 +89,66 @@ public class Solution {
 		// }
 		// return dummy.next;
 	}
+
+	// ********* Add digit (O(1), mathematical representation of decimals)
+	public int addDigits(int num) {
+		// int sum = 0;
+		// while (true) {
+		// sum += num % 10;
+		// num /= 10;
+		// if (num == 0) {
+		// if (sum < 10)
+		// break;
+		// else {
+		// num = sum;
+		// sum = 0;
+		// }
+		// }
+		// }
+		// return sum;
+
+		return 1 + (num - 1) % 9; // O(1)
+	}
+
+	// ********* Maximum depth of binary tree (DFS, BFS)
+	public class TreeNode {
+		int val;
+		TreeNode left;
+		TreeNode right;
+
+		TreeNode(int x) {
+			val = x;
+		}
+	}
+
+	public int maxDepth(TreeNode root) {
+		if (root == null)
+			return 0;
+		int left = maxDepth(root.left);
+		int right = maxDepth(root.right);
+		return 1 + (left > right ? left : right);
+		
+//		if(root == NULL)
+//	        return 0;
+//	    
+//	    int res = 0;
+//	    queue<TreeNode *> q;
+//	    q.push(root);
+//	    while(!q.empty())
+//	    {
+//	        ++ res;
+//	        for(int i = 0, n = q.size(); i < n; ++ i)
+//	        {
+//	            TreeNode *p = q.front();
+//	            q.pop();
+//	            
+//	            if(p -> left != NULL)
+//	                q.push(p -> left);
+//	            if(p -> right != NULL)
+//	                q.push(p -> right);
+//	        }
+//	    }
+//	    
+//	    return res;
+	}
 }
