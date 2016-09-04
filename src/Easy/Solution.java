@@ -225,4 +225,71 @@ public class Solution {
 		// set.contains(e)).toArray();
 	}
 
+	// ********* Move zeros
+	public void moveZeroes(int[] nums) {
+		// for (int i = 0; i < nums.length - 1; i++) {
+		// for (int j = 0; j < nums.length - i - 1; j++) {
+		// if (nums[j] == 0 && nums[j + 1] != 0) {
+		// nums[j] = nums[j + 1];
+		// nums[j + 1] = 0;
+		// }
+		// }
+		// }
+
+		// int start = 0, non_zero = 0, counter = 0;
+		// while (start < nums.length - 1) {
+		// if (nums[start] != 0) {
+		// start++;
+		// } else {
+		// non_zero = start;
+		// while (nums[non_zero] == 0 && non_zero < nums.length - 1)
+		// non_zero++;
+		//
+		// if (nums[non_zero] != 0) {
+		// nums[start] = nums[non_zero];
+		// nums[non_zero] = 0;
+		// start++;
+		// counter++;
+		// } else {
+		// break;
+		// }
+		// }
+		// }
+
+		if (nums.length == 0 || nums == null)
+			return;
+		int index = 0;
+		for (int n : nums) {
+			if (n != 0)
+				nums[index++] = n;
+		}
+		while (index < nums.length) {
+			nums[index++] = 0;
+		}
+	}
+
+	// ********* Delete node (change value)
+	public void deleteNode(ListNode node) {
+		if (node == null)
+			return;
+		if (node.next.next != null) {
+			node.val = node.next.val;
+			deleteNode(node.next);
+		} else {
+			node.val = node.next.val;
+			node.next = null;
+			return;
+		}
+	}
+
+	// ********* Is same tree (compare one by one, iterate a tree)
+	public boolean isSameTree(TreeNode p, TreeNode q) {
+		if (p == null || q == null) {
+			return p == q;
+		}
+		if (p.val != q.val) {
+			return false;
+		}
+		return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+	}
 }
