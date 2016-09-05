@@ -1,5 +1,6 @@
 package Easy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,7 +11,12 @@ public class Solution {
 
 	public static void main(String[] args) {
 		System.out.println("Leetcode practice");
-		System.out.println(canConstruct("aa", "ab"));
+		// System.out.println(canConstruct("aa", "ab"));
+
+		int[] num1 = { 1, 2, 2, 1 };
+		int[] num2 = { 2, 2 };
+		int[] inter = intersect(num1, num2);
+		System.out.println(inter[0] + " " + inter[1]);
 	}
 
 	// *********Reverse String
@@ -421,5 +427,126 @@ public class Solution {
 
 		Arrays.sort(nums);
 		return nums[(int) Math.floor(nums.length / 2)];
+	}
+
+	// ********* Array intersection II(Sort and use two pointers)
+	public static int[] intersect(int[] nums1, int[] nums2) {
+		// int[] result;
+		// HashMap<Integer, Integer> index_list = new HashMap<>();
+		//
+		// int[] short_num, long_num;
+		// if (nums1.length > nums2.length) {
+		// short_num = nums2;
+		// long_num = nums1;
+		// } else {
+		// short_num = nums1;
+		// long_num = nums2;
+		// }
+		//
+		// for (int i = 0; i < long_num.length; i++) {
+		// for (int j = 0; j < short_num.length; j++) {
+		// if (index_list.containsKey(j))
+		// continue;
+		// if (long_num[i] == short_num[j]) {
+		// index_list.put(j, short_num[j]);
+		// break;
+		// }
+		// }
+		// }
+		// result = new int[index_list.size()];
+		// int index = 0;
+		// for (Integer i : index_list.keySet()) {
+		// result[index] = short_num[i];
+		// index++;
+		// }
+		// return result;
+
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		Arrays.sort(nums1);
+		Arrays.sort(nums2);
+		int i = 0, j = 0;
+		while (i < nums1.length && j < nums2.length) {
+			if (nums1[i] == nums2[j]) {
+				result.add(nums2[j]);
+				i++;
+				j++;
+				continue;
+			}
+			if (nums1[i] > nums2[j])
+				j++;
+			else
+				i++;
+		}
+		i = 0;
+		int[] inter = new int[result.size()];
+		for (Integer num : result) {
+			inter[i] = num;
+			i++;
+		}
+		return inter;
+	}
+
+	// ********* Reverse single linked list
+	public ListNode reverseList(ListNode head) {
+		// if (head == null || head.next == null)
+		// return head;
+		// if (head.next.next == null) {
+		// head.next.next = head;
+		// ListNode tmp = head.next;
+		// head.next = null;
+		// return tmp;
+		// }
+		// ListNode tmp1, tmp2, tmp3;
+		// tmp1 = head;
+		// tmp2 = head.next;
+		// tmp3 = head.next.next;
+		// tmp1.next = null;
+		// while (tmp3 != null) {
+		// tmp2.next = tmp1;
+		// tmp1 = tmp2;
+		// tmp2 = tmp3;
+		// tmp3 = tmp3.next;
+		// }
+		// tmp2.next = tmp1;
+		// return tmp2;
+
+		ListNode newHead = null;
+		while (head != null) {
+			ListNode next = head.next;
+			head.next = newHead;
+			newHead = head;
+			head = next;
+		}
+		return newHead;
+	}
+
+	// ********* Power of 3 (Factors)
+	public boolean isPowerOfThree(int n) {
+		// if (n == 0)
+		// return false;
+		// while (n != 1) {
+		// if (n % 3 != 0)
+		// return false;
+		// n /= 3;
+		// }
+		// return true;
+
+		return (n > 0 && Math.pow(3, 19) % n == 0);
+	}
+
+	// ********* Power of 2 (Binary, bit manipulation)
+	public boolean isPowerOfTwo(int n) {
+//		if (n <= 0)
+//			return false;
+//		int sum = 0;
+//		while (n > 0) {
+//			sum += n & 1;
+//			n >>= 1;
+//			if (sum > 1)
+//				return false;
+//		}
+//		return true;
+//		
+		return n>0 && Integer.bitCount(n) == 1;
 	}
 }
