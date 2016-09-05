@@ -401,25 +401,25 @@ public class Solution {
 	}
 
 	public int majorityElement(int[] nums) {
-//		HashMap<Integer, Integer> num_list = new HashMap<Integer, Integer>();
-//		int major = 0;
-//
-//		for (int i = 0; i < nums.length; i++) {
-//			if (num_list.containsKey(nums[i])) {
-//				num_list.put(nums[i], num_list.get(nums[i]) + 1);
-//			} else
-//				num_list.put(nums[i], 1);
-//		}
-//
-//		for (Integer i : num_list.keySet()) {
-//			if (num_list.get(i) > Math.floor(nums.length / 2)) {
-//				major = i;
-//				break;
-//			}
-//		}
-//		return major;
-		
+		// HashMap<Integer, Integer> num_list = new HashMap<Integer, Integer>();
+		// int major = 0;
+		//
+		// for (int i = 0; i < nums.length; i++) {
+		// if (num_list.containsKey(nums[i])) {
+		// num_list.put(nums[i], num_list.get(nums[i]) + 1);
+		// } else
+		// num_list.put(nums[i], 1);
+		// }
+		//
+		// for (Integer i : num_list.keySet()) {
+		// if (num_list.get(i) > Math.floor(nums.length / 2)) {
+		// major = i;
+		// break;
+		// }
+		// }
+		// return major;
+
 		Arrays.sort(nums);
-		return nums[(int) Math.floor(nums.length/2)];
+		return nums[(int) Math.floor(nums.length / 2)];
 	}
 }
