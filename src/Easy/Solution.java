@@ -1,5 +1,8 @@
 package Easy;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -7,6 +10,7 @@ public class Solution {
 
 	public static void main(String[] args) {
 		System.out.println("Leetcode practice");
+		System.out.println(canConstruct("aa", "ab"));
 	}
 
 	// *********Reverse String
@@ -291,5 +295,131 @@ public class Solution {
 			return false;
 		}
 		return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+	}
+
+	// ********* Ransom Note ()
+	public static boolean canConstruct(String ransomNote, String magazine) {
+		HashMap<Character, Integer> Note = new HashMap<Character, Integer>();
+		HashMap<Character, Integer> Mag = new HashMap<Character, Integer>();
+
+		for (int i = 0; i < ransomNote.length(); i++) {
+			if (Note.containsKey(ransomNote.charAt(i))) {
+				Note.put(ransomNote.charAt(i), Note.get(ransomNote.charAt(i) + 1));
+			} else {
+				Note.put(ransomNote.charAt(i), 1);
+			}
+		}
+
+		for (int i = 0; i < magazine.length(); i++) {
+			if (Mag.containsKey(magazine.charAt(i))) {
+				Mag.put(magazine.charAt(i), Mag.get(magazine.charAt(i) + 1));
+			} else {
+				Mag.put(magazine.charAt(i), 1);
+			}
+		}
+		System.out.println("");
+
+		for (Character c : Note.keySet()) {
+			if (Mag.containsKey(c)) {
+				if (Mag.get(c) - Note.get(c) >= 0)
+					continue;
+			}
+			return false;
+		}
+
+		return true;
+	}
+
+	// ********* title number
+	public int titleToNumber(String s) {
+		int column = 0;
+		for (int i = 0; i < s.length(); i++) {
+			column *= 26;
+			column += (s.charAt(i) - 'A' + 1);
+		}
+		return column;
+	}
+
+	// ********* Valid anagram
+	public boolean isAnagram(String s, String t) {
+		// sort s
+		// if (s.length() != t.length())
+		// return false;
+		//
+		// Character[] char_s = new Character[s.length()];
+		// Character[] char_t = new Character[s.length()];
+		// for (int i = 0; i < s.length(); i++) {
+		// char_s[i] = s.charAt(i);
+		// char_t[i] = t.charAt(i);
+		// }
+		//
+		// Arrays.sort(char_s);
+		// Arrays.sort(char_t);
+		//
+		// for (int i = 0; i < s.length(); i++) {
+		// if (char_s[i] != char_t[i])
+		// return false;
+		// }
+		// // sort t
+		// // compare, if equals true; else false
+		// return true;
+
+		int[] alphabet = new int[26];
+		for (int i = 0; i < s.length(); i++)
+			alphabet[s.charAt(i) - 'a']++;
+		for (int i = 0; i < t.length(); i++)
+			alphabet[t.charAt(i) - 'a']--;
+		for (int i : alphabet)
+			if (i != 0)
+				return false;
+		return true;
+	}
+
+	// First unique character
+	public int firstUniqChar(String s) {
+		// HashMap<Character, Integer> s_map = new HashMap<>();
+		// for (int i = 0; i < s.length(); i++) {
+		// if (s_map.containsKey(s.charAt(i)))
+		// s_map.put(s.charAt(i), s.length());
+		// else
+		// s_map.put(s.charAt(i), i);
+		// }
+		// int min = s.length();
+		// for (Character c : s_map.keySet()) {
+		// if (s_map.get(c) < min)
+		// min = s_map.get(c);
+		// }
+		// return min == s.length() ? -1 : min;
+
+		int freq[] = new int[26];
+		for (int i = 0; i < s.length(); i++)
+			freq[s.charAt(i) - 'a']++;
+		for (int i = 0; i < s.length(); i++)
+			if (freq[s.charAt(i) - 'a'] == 1)
+				return i;
+		return -1;
+	}
+
+	public int majorityElement(int[] nums) {
+//		HashMap<Integer, Integer> num_list = new HashMap<Integer, Integer>();
+//		int major = 0;
+//
+//		for (int i = 0; i < nums.length; i++) {
+//			if (num_list.containsKey(nums[i])) {
+//				num_list.put(nums[i], num_list.get(nums[i]) + 1);
+//			} else
+//				num_list.put(nums[i], 1);
+//		}
+//
+//		for (Integer i : num_list.keySet()) {
+//			if (num_list.get(i) > Math.floor(nums.length / 2)) {
+//				major = i;
+//				break;
+//			}
+//		}
+//		return major;
+		
+		Arrays.sort(nums);
+		return nums[(int) Math.floor(nums.length/2)];
 	}
 }
