@@ -536,17 +536,83 @@ public class Solution {
 
 	// ********* Power of 2 (Binary, bit manipulation)
 	public boolean isPowerOfTwo(int n) {
-//		if (n <= 0)
-//			return false;
-//		int sum = 0;
-//		while (n > 0) {
-//			sum += n & 1;
-//			n >>= 1;
-//			if (sum > 1)
-//				return false;
-//		}
-//		return true;
-//		
-		return n>0 && Integer.bitCount(n) == 1;
+		// if (n <= 0)
+		// return false;
+		// int sum = 0;
+		// while (n > 0) {
+		// sum += n & 1;
+		// n >>= 1;
+		// if (sum > 1)
+		// return false;
+		// }
+		// return true;
+		//
+		return n > 0 && Integer.bitCount(n) == 1;
+	}
+
+	// ********* Happy number (loop and recursion)
+	public boolean isHappy(int n) {
+		while (true) {
+			int sum = 0;
+			while (n > 0) {
+				sum += Math.pow(n % 10, 2);
+				n /= 10;
+			}
+			if (sum == 1 || sum == 7)
+				break;
+			else if (sum < 10)
+				return false;
+			n = sum;
+		}
+		return true;
+	}
+
+	// ********* Delete duplicate (pointers)
+	public ListNode deleteDuplicates(ListNode head) {
+		if (head == null)
+			return head;
+		int tmp = head.val;
+		ListNode skip = head;
+		ListNode H = head;
+		while (head != null) {
+			if (skip != null) {
+				if (skip.val == tmp)
+					skip = skip.next;
+				else {
+
+					tmp = skip.val;
+					head.next = skip;
+					head = head.next;
+					skip = head;
+				}
+			} else {
+				head.next = null;
+				break;
+			}
+
+		}
+		return H;
+	}
+	// ********* Ugly number (Recursion/loop)
+	public boolean isUgly(int num) {
+		if (num <= 0)
+			return false;
+		while (num % 2 == 0) {
+			num /= 2;
+		}
+		if (num == 1)
+			return true;
+		while (num % 3 == 0) {
+			num /= 3;
+		}
+		if (num == 1)
+			return true;
+		while (num % 5 == 0) {
+			num /= 5;
+		}
+		if (num == 1)
+			return true;
+		else
+			return false;
 	}
 }
