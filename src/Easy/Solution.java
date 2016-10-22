@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 public class Solution {
 
@@ -593,6 +594,7 @@ public class Solution {
 		}
 		return H;
 	}
+
 	// ********* Ugly number (Recursion/loop)
 	public boolean isUgly(int num) {
 		if (num <= 0)
@@ -614,5 +616,37 @@ public class Solution {
 			return true;
 		else
 			return false;
+	}
+
+	// Fizz Buzz
+	public List<String> fizzBuzz(int n) {
+		ArrayList<String> r = new ArrayList<>();
+		for (int i = 1; i <= n; i++) {
+			String str = "";
+			if (i % 3 == 0) {
+				str += "Fizz";
+			}
+			if (i % 5 == 0) {
+				str += "Buzz";
+			}
+			str = str.length() == 0 ? Integer.toString(i) : str;
+			r.add(str);
+		}
+		return r;
+	}
+
+	// Sum of left leaves
+	public int sumOfLeftLeaves(TreeNode root) {
+		if (root == null)
+			return 0;
+		if (root.left == null && root.right == null)
+			return 0;
+		if (root.left != null) {
+			if (root.left.left == null && root.left.right == null) {
+				return root.left.val + sumOfLeftLeaves(root.right);
+			}
+			return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
+		}
+		return sumOfLeftLeaves(root.right);
 	}
 }
