@@ -635,7 +635,8 @@ public class Solution {
 		return r;
 	}
 
-	// Sum of left leaves
+	// Sum of left leaves (4 solutions)
+	// DFS, BFS, Recursive, Pass isleft as arguments
 	public int sumOfLeftLeaves(TreeNode root) {
 		if (root == null)
 			return 0;
