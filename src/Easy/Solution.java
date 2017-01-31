@@ -650,4 +650,106 @@ public class Solution {
 		}
 		return sumOfLeftLeaves(root.right);
 	}
+
+	public int hammingDistance(int x, int y) {
+		// int z = x ^ y;
+		// int count = 0;
+		// while (z != 0) {
+		// if (z % 2 != 0) {
+		// count++;
+		// }
+		// z = z / 2;
+		// }
+		// return count;
+		// simplest bit operation, faster than dividend
+		int z = x ^ y;
+		int count = 0;
+		while (z != 0) {
+			count += z & 1;
+			z = z >> 1;
+		}
+		return count;
+
+		// One line code using lib function, slow
+		// return Integer.bitCount(x ^ y);
+	}
+
+	public int findComplement(int num) {
+		return ~num & ((Integer.highestOneBit(num) << 1) - 1);
+	}
+
+	public int findMaxConsecutiveOnes(int[] nums) {
+		// int count = 0;
+		// int s = 0, e = 0;
+		// while (e < nums.length) {
+		// if (nums[s] == 1) {
+		// e = s;
+		// while (nums[e] == 1) {
+		// e++;
+		// }
+		// count = e - s > count ? e - s : count;
+		// s = e;
+		// }
+		// s++;
+		// }
+		// return count;
+		// Use 0 to reset counter, slow
+		int maxHere = 0, max = 0;
+		for (int n : nums)
+			max = Math.max(max, maxHere = n == 0 ? 0 : maxHere + 1);
+		return max;
+	}
+
+	public int lengthOfLongestSubstring(String s) {
+		// Too slow
+		// int[] table = new int[128];
+		// int length = 0;
+		// int st = 0;
+		// for (int i = 0; i < s.length(); i++) {
+		// if (table[(int) s.charAt(i)] == 1) {
+		// table = new int[128];
+		// length = Math.max(i - st, length);
+		// st++;
+		// i=st;
+		// table[(int) s.charAt(st)] = 1;
+		// } else {
+		// table[(int) s.charAt(i)] = 1;
+		// }
+		// if (i == s.length() - 1)
+		// length = Math.max(i - st+1, length);
+		// }
+		// return length;
+
+		// Use hashmap to remember where the duplicate occur,move the st index
+		// to the right of the 1st place of the duplicate
+		if (s.length() == 0)
+			return 0;
+		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+		int max = 0;
+		for (int i = 0, j = 0; i < s.length(); ++i) {
+			if (map.containsKey(s.charAt(i))) {
+				j = Math.max(j, map.get(s.charAt(i)) + 1);
+			}
+			map.put(s.charAt(i), i);
+			max = Math.max(max, i - j + 1);
+		}
+		return max;
+	}
+
+	public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+		return findSubMedian(nums1, nums2);
+	}
+
+	private double findSubMedian(int[] nums1, int[] nums2) {
+		int M1 = (nums1[(int) Math.floor((nums1.length - 1) / 2)] + nums1[(int) Math.ceil((nums1.length - 1) / 2)]) / 2;
+		int M2 = (nums2[(int) Math.floor((nums2.length - 1) / 2)] + nums2[(int) Math.ceil((nums2.length - 1) / 2)]) / 2;
+
+		if (M1 == M2)
+			return M1;
+		else if (M1 > M2) {
+
+		} else {
+
+		}
+	}
 }
