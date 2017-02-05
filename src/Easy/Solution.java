@@ -10,16 +10,6 @@ import java.util.List;
 
 public class Solution {
 
-	public static void main(String[] args) {
-		System.out.println("Leetcode practice");
-		// System.out.println(canConstruct("aa", "ab"));
-
-		int[] num1 = { 1, 2, 2, 1 };
-		int[] num2 = { 2, 2 };
-		int[] inter = intersect(num1, num2);
-		System.out.println(inter[0] + " " + inter[1]);
-	}
-
 	// *********Reverse String
 	String reverseString(String s) {
 		String new_s = "";
@@ -741,15 +731,200 @@ public class Solution {
 	}
 
 	private double findSubMedian(int[] nums1, int[] nums2) {
-		int M1 = (nums1[(int) Math.floor((nums1.length - 1) / 2)] + nums1[(int) Math.ceil((nums1.length - 1) / 2)]) / 2;
-		int M2 = (nums2[(int) Math.floor((nums2.length - 1) / 2)] + nums2[(int) Math.ceil((nums2.length - 1) / 2)]) / 2;
+		if (nums1.length == 0 && nums2.length == 0)
+			return 0;
+		if (nums1.length == 0)
+			return findSubMedian(Arrays.copyOf(nums2, nums2.length), Arrays.copyOf(nums2, nums2.length));
+		if (nums2.length == 0)
+			return findSubMedian(Arrays.copyOf(nums1, nums1.length), Arrays.copyOf(nums1, nums1.length));
+		if (nums1.length == 1 && nums2.length == 1)
+			return (double) (nums1[0] + nums2[0]) / 2;
+
+		int m1 = 0;
+		double M1 = 0;
+		int[] nums1_left, nums2_left, nums1_right, nums2_right;
+		if (nums1.length % 2 == 0) {
+
+			m1 = (nums1.length) / 2;
+			M1 = (double) (nums1[m1] + nums1[m1 - 1]) / 2;
+			nums1_left = Arrays.copyOfRange(nums1, 0, m1);
+			nums1_right = Arrays.copyOfRange(nums1, m1, nums1.length);
+			if (nums2.length == 1) {
+				if (nums2[0] < M1) {
+					return nums1[m1 - 1];
+				} else
+					return nums1[m1];
+			}
+		} else {
+			m1 = (nums1.length - 1) / 2;
+			M1 = (double) nums1[m1];
+			if (m1 != 0) {
+				nums1_left = Arrays.copyOfRange(nums1, 0, m1);
+				nums1_right = Arrays.copyOfRange(nums1, m1 + 1, nums1.length);
+			} else {
+				nums1_left = Arrays.copyOfRange(nums1, 0, 1);
+				nums1_right = Arrays.copyOfRange(nums1, 0, 1);
+			}
+			if (nums2.length == 1) {
+				if (nums2[0] < M1) {
+					return (double) (nums1[m1 - 1] + nums1[m1]) / 2;
+				} else
+					return (double) (nums1[m1 + 1] + nums1[m1]) / 2;
+			}
+		}
+		int m2 = 0;
+		double M2 = 0;
+		if (nums2.length % 2 == 0) {
+			m2 = (nums2.length) / 2;
+			M2 = (double) (nums2[m2] + nums2[m2 - 1]) / 2;
+			nums2_left = Arrays.copyOfRange(nums2, 0, m2);
+			nums2_right = Arrays.copyOfRange(nums2, m2, nums2.length);
+			if (nums1.length == 1) {
+				if (nums1[0] < M2) {
+					return nums2[m2 - 1];
+				} else
+					return nums2[m2];
+			}
+		} else {
+			m2 = (nums2.length - 1) / 2;
+			M2 = (double) nums2[m2];
+			if (m2 != 0) {
+				nums2_left = Arrays.copyOfRange(nums2, 0, m2);
+				nums2_right = Arrays.copyOfRange(nums2, m2 + 1, nums2.length);
+			} else {
+				nums2_left = Arrays.copyOfRange(nums2, 0, 1);
+				nums2_right = Arrays.copyOfRange(nums2, 0, 1);
+			}
+			if (nums1.length == 1) {
+				if (nums1[0] < M2) {
+					return (double) (nums2[m2 - 1] + nums2[m2]) / 2;
+				} else
+					return (double) (nums2[m2 + 1] + nums2[m2]) / 2;
+			}
+		}
 
 		if (M1 == M2)
 			return M1;
 		else if (M1 > M2) {
-
+			return findSubMedian(nums1_left, nums2_right);
 		} else {
-
+			return findSubMedian(nums1_right, nums2_left);
 		}
 	}
+
+	// Too slow
+	// public String longestPalindrome(String s) {
+	// String palin = "";
+	// if (s != null && s.length() != 0) {
+	// for (int i = 0; i < s.length() - palin.length(); i++) {
+	// for (int j = s.length() - 1; j >= i + palin.length(); j--) {
+	// if (check_Palindrome(s.substring(i, j + 1)) && j - i + 1 >
+	// palin.length()) {
+	// palin = s.substring(i, j + 1);
+	// }
+	// }
+	// }
+	// }
+	//
+	// return palin;
+	// }
+	// public String longestPalindrome(String s) {
+	// String palin = "";
+	// if (s != null && s.length() > 1) {
+	// palin = s.substring(0, 1); // initialize palin at least 1 long
+	// HashMap<int[], Integer> palin_list = new HashMap<>();
+	// // Initialize palindrome seed
+	// int N = 1; // palindrome should be at least 2 long
+	// for (int i = 0; i < s.length() - 1; i++) {
+	// if (check_Palindrome(s.substring(i, i + 2))) {
+	// palin_list.put(new int[] { i, i + 2 }, 2);
+	// N = 2;
+	// }
+	// }
+	// for (int i = 0; i < s.length() - 2; i++) {
+	// if (check_Palindrome(s.substring(i, i + 3))) {
+	// palin_list.put(new int[] { i, i + 3 }, 3);
+	// N = 3;
+	// }
+	// }
+	// // grow the palindrome seed
+	// growseedloop: while (!palin_list.isEmpty()) {
+	// HashMap<int[], Integer> new_palin_list = new HashMap<>();
+	// for (int[] key : palin_list.keySet()) {
+	// int st = key[0];
+	// int ed = key[1];
+	// try {
+	// if (s.charAt(st - 1) == s.charAt(ed)) {
+	// new_palin_list.put(new int[] { st - 1, ed + 1 }, ed - st + 2);
+	// N = ed - st + 2 > N ? ed - st + 2 : N;
+	// }
+	// } catch (Exception e) {
+	// }
+	// }
+	// if (new_palin_list.isEmpty()) { // get the palindrome
+	// for (int[] key : palin_list.keySet()) {
+	// if (palin_list.get(key) == N) {
+	// palin = s.substring(key[0], key[1]);
+	// break growseedloop;
+	// }
+	// }
+	// } else {
+	// palin_list = new HashMap<int[], Integer>(new_palin_list);
+	// }
+	// }
+	// } else {
+	// palin = s.substring(0, 1); // initialize palin at least 1 long
+	// }
+	// return palin;
+	// }
+	// private boolean check_Palindrome(String s) {
+	// if (s.length() <= 1)
+	// return true;
+	// if (s.charAt(0) == s.charAt(s.length() - 1))
+	// return check_Palindrome(s.substring(1, s.length() - 1));
+	// return false;
+	// }
+
+	private int lo, maxLen;
+
+	public String longestPalindrome(String s) {
+		int len = s.length();
+		if (len < 2)
+			return s;
+
+		for (int i = 0; i < len - 1; i++) {
+			extendPalindrome(s, i, i); // assume odd length, try to extend
+			// Palindrome as possible
+			extendPalindrome(s, i, i + 1); // assume even length.
+		}
+		return s.substring(lo, lo + maxLen);
+	}
+
+	private void extendPalindrome(String s, int j, int k) {
+		while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
+			j--;
+			k++;
+		}
+		if (maxLen < k - j - 1) {
+			lo = j + 1;
+			maxLen = k - j - 1;
+		}
+	}
+
+	public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+		if (l1 == null) {
+			return l2;
+		}
+		if (l2 == null) {
+			return l1;
+		}
+		if (l1.val < l2.val) {
+			l1.next = mergeTwoLists(l1.next, l2);
+			return l1;
+		} else {
+			l2.next = mergeTwoLists(l2.next, l1);
+			return l2;
+		}
+	}
+
 }
