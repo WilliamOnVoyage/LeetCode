@@ -926,5 +926,86 @@ public class Solution {
 			return l2;
 		}
 	}
+	// Too slow
+	// public List<Integer> findAnagrams(String s, String p) {
+	// ArrayList<Integer> r = new ArrayList<>();
+	// String p_sort = sort_char(p);
+	// boolean previous = false;
+	// for (int i = 0; i <= s.length() - p.length(); i++) {
+	// String str = s.substring(i, i + p.length());
+	// if (previous) {
+	// if (str.charAt(p.length() - 1) == s.charAt(i - 1)) {
+	// r.add(i);
+	// previous = true;
+	// continue;
+	// }
+	// }
+	// if (sort_char(str).equals(p_sort)) {
+	// r.add(i);
+	// previous = true;
+	// } else {
+	// previous = false;
+	// }
+	// }
+	// return r;
+	// }
+	//
+	// private String sort_char(String s) {
+	// String r = "";
+	// char[] ch = s.toCharArray();
+	// Arrays.sort(ch);
+	// return r = new String(ch);
+	// }
 
+	public List<Integer> findAnagrams(String s, String p) {
+		ArrayList<Integer> r = new ArrayList<>();
+		if (s == null || s.length() == 0 || p == null || p.length() == 0)
+			return r;
+		int[] hash = new int[128];
+		int[] gt = new int[128];
+		for (char c : p.toCharArray()) {
+			hash[c]++;
+		}
+		int st = 0;
+		int ed = 0;
+		int count = p.length();
+		while (ed < s.length()) {
+			if (hash[s.charAt(ed++)]-- > 0)
+				count--;
+			if (count == 0)
+				r.add(st);
+			if (ed - st == p.length() && hash[s.charAt(st++)]++ >= 0) {
+				count++;
+			}
+		}
+		return r;
+	}
+
+	// RETHINK THIS
+	public int trailingZeroes(int n) {
+		return n == 0 ? 0 : n / 5 + trailingZeroes(n / 5);
+	}
+
+	public int removeDuplicates(int[] nums) {
+		int nondup_index = 0;
+		for (int i = 0; i < nums.length; i++) {
+			if (nums[i] != nums[nondup_index]) {
+				nums[++nondup_index] = nums[i];
+			}
+		}
+		return ++nondup_index;
+	}
+
+	public List<Integer> getRow(int rowIndex) {
+		if (rowIndex == 0)
+			return new ArrayList<Integer>(Arrays.asList(1));
+		List<Integer> r = new ArrayList<Integer>();
+		r.add(1);
+		List<Integer> last = getRow(rowIndex - 1);
+		for (int i = 1; i < rowIndex; i++) {
+			r.add(last.get(i - 1) + last.get(i));
+		}
+		r.add(1);
+		return r;
+	}
 }
