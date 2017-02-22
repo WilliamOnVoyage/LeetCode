@@ -1,4 +1,4 @@
-package Easy;
+package algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1056,4 +1056,44 @@ public class Solution {
 		}
 	}
 
+	public String[] findWords(String[] words) {
+		List<String> result = new ArrayList<>();
+		int[] charidx = new int[128];
+		charidx['q'] = charidx['w'] = charidx['e'] = charidx['r'] = charidx['t'] = charidx['y'] = charidx['u'] = charidx['i'] = charidx['o'] = charidx['p'] = 1;
+		charidx['a'] = charidx['s'] = charidx['d'] = charidx['f'] = charidx['g'] = charidx['h'] = charidx['j'] = charidx['k'] = charidx['l'] = 2;
+		charidx['z'] = charidx['x'] = charidx['c'] = charidx['v'] = charidx['b'] = charidx['n'] = charidx['m'] = 3;
+
+		for (String s : words) {
+			if (s.length() > 0) {
+				int flag = charidx[lower_case(s.charAt(0))];
+				int i = 1;
+				for (; i < s.length(); i++) {
+					if (charidx[lower_case(s.charAt(i))] != flag) {
+						// result.remove(s);
+						break;
+					}
+				}
+				if (i == s.length()) {
+					result.add(s);
+				}
+			}
+		}
+		return result.toArray(new String[result.size()]);
+	}
+
+	private char lower_case(char A) {
+		if (A >= 'A' && A <= 'Z') {
+			return (char) (A - 'A' + 'a');
+		} else
+			return A;
+	}
+
+	public int countBattleships(char[][] board) {
+		int count = 0;
+		for (int i = 0; i < board.length; i++)
+			for (int j = 0; j < board[0].length; j++)
+				if (board[i][j] == 'X' && (i == 0 || board[i - 1][j] != 'X') && (j == 0 || board[i][j - 1] != 'X'))
+					count++;
+		return count;
+	}
 }
