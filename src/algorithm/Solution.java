@@ -1096,4 +1096,58 @@ public class Solution {
 					count++;
 		return count;
 	}
+
+	public boolean hasCycle(ListNode head) {
+		if (head == null)
+			return false;
+		ListNode faster = head;
+		ListNode slower = head;
+
+		while (slower != null && faster != null && faster.next != null) {
+			slower = slower.next;
+			faster = faster.next.next;
+			if (slower == faster)
+				return true;
+		}
+		return false;
+	}
+
+	// public int[] countBits(int num) {
+	// if (num == 0)
+	// return new int[1];
+	// int power = cal_p(num);
+	// int[] r = new int[(int) Math.pow(2, power + 1)];
+	// r[0] = 0;
+	// r[1] = 1;
+	// for (int index = 2; index < r.length; index *= 2) {
+	// int mid = (index + index * 2) / 2;
+	// for (int i = index; i < mid; i++) {
+	// r[i] = r[i - index / 2];
+	// }
+	// for (int i = mid; i < index * 2; i++) {
+	// r[i] = r[i - index / 2] + 1;
+	// }
+	// }
+	// r = Arrays.copyOf(r, num + 1);
+	// return r;
+	// }
+	//
+	// private int cal_p(int num) {
+	// int p = 0;
+	// while (num != 0) {
+	// num /= 2;
+	// p++;
+	// }
+	// return p;
+	// }
+
+	// The left shift(*2) does not influence the number of bits, only the last
+	// digit add to it influence
+	public int[] countBits(int num) {
+		int[] f = new int[num + 1];
+		for (int i = 1; i <= num; i++)
+			f[i] = f[i >> 1] + (i & 1);
+		return f;
+	}
+
 }
