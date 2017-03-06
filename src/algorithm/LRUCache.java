@@ -18,11 +18,10 @@ public class LRUCache {
 		}
 	}
 
-	private HashMap<Integer,ListNode> list = new HashMap<>();
+	private HashMap<Integer, ListNode> list = new HashMap<>();
 	private ListNode head = null;
 	private ListNode tail = null;
 	private int cap = 0;
-	private int size = 0;
 
 	public LRUCache(int capacity) {
 		if (capacity > 0) {
@@ -38,7 +37,7 @@ public class LRUCache {
 		ListNode n = containsKey(key);
 		if (n != null) {
 			val = n.val;
-			useKey(n);
+			useKeyNode(n);
 		}
 		return val;
 	}
@@ -47,59 +46,59 @@ public class LRUCache {
 		ListNode n = containsKey(key);
 		if (n != null) { // key already in
 			n.val = value;
-			useKey(n);
+			useKeyNode(n);
 		} else {
-			if (size == cap) {
+			if (list.size() == cap) {// remove head
 				if (head.next != null) { // more than 1 element
 					head.next.prev = null;
+					updateNodeinList(head.next);
 				}
 				ListNode temp = head;
-				head = head.next; // remove head
-				if (head != null)
-					head.prev = null;
+				head = head.next;
 				temp.next = null;
 				temp.prev = null;
+				int temp_key = temp.key;
 				temp = null;
-				size--;
+				list.remove(temp_key);
 			}
+			ListNode new_element = new ListNode(key, value);
 			if (head != null && tail != null) { // Add to tail
-				ListNode new_element = new ListNode(key, value);
 				tail.next = new_element;
+				updateNodeinList(tail);
 				new_element.prev = tail;
 				tail = tail.next;
 			} else { // Initialize the head element
-				ListNode new_element = new ListNode(key, value);
 				head = new_element;
 				tail = head;
 			}
-			size++;
+			updateNodeinList(new_element);
 		}
 	}
 
 	private ListNode containsKey(int key) {
-		ListNode temp = tail;
-		while (temp != null) {
-			if (temp.key == key)
-				return temp;
-			temp = temp.prev;
-		}
-		return null;
+		return list.get(key);
 	}
 
-	private void useKey(ListNode key) {
-		if (key.next != null) {
-			if (key.prev == null) {// head element
-				key.next.prev = key.prev;
-				head = key.next;
+	private void useKeyNode(ListNode node) {
+		if (node.next != null) {
+			if (node.prev == null) {// head element
+				head = node.next;
 			} else {
-				key.prev.next = key.next;
-				key.next.prev = key.prev;
+				node.prev.next = node.next;
+				updateNodeinList(node.prev);
 			}
-			key.next = null;
-			tail.next = key;
-			key.prev = tail;
-
+			node.next.prev = node.prev;
+			updateNodeinList(node.next);
+			node.next = null;
+			tail.next = node;
+			node.prev = tail;
+			updateNodeinList(node);
+			updateNodeinList(tail);
 			tail = tail.next;
 		} // else the element is the last one, do nothing
+	}
+
+	private void updateNodeinList(ListNode n) {
+		list.put(n.key, n);
 	}
 }
