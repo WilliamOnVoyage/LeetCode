@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class Solution {
+public class Simple_solutions {
 
 	// *********Reverse String
 	String reverseString(String s) {
