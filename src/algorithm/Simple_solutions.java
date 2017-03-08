@@ -927,6 +927,7 @@ public class Simple_solutions {
 			return l2;
 		}
 	}
+
 	// Too slow
 	// public List<Integer> findAnagrams(String s, String p) {
 	// ArrayList<Integer> r = new ArrayList<>();
@@ -1152,5 +1153,86 @@ public class Simple_solutions {
 
 	public void merge(int[] nums1, int m, int[] nums2, int n) {
 
+	}
+
+	public String convert(String s, int numRows) {
+		int n = s.length();
+		if (n == 0 || numRows <= 1 || numRows >= n)
+			return s;
+		StringBuilder sb = new StringBuilder();
+		int r = 0;
+		int index = r;
+		int post_index = 0;
+		while (index < n) {
+			sb.append(s.charAt(index));
+			index += 2 * (numRows - 1);
+		}
+		for (r = 1; r < numRows; r++) {
+			index = r;
+			while (index < n) {
+				sb.append(s.charAt(index));
+				post_index = index + 2 * (numRows - 1 - r);
+				if (post_index < n && post_index != index)
+					sb.append(s.charAt(post_index));
+				index += 2 * (numRows - 1);
+			}
+		}
+		return sb.toString();
+	}
+
+	public int[] plusOne(int[] digits) {
+		if (digits.length < 1)
+			return null;
+		int index = digits.length - 1;
+		int carry = 1;
+		while (carry != 0 && index >= 0) {
+			digits[index] += carry;
+			carry = digits[index] > 9 ? 1 : 0;
+			digits[index] %= 10;
+			index--;
+		}
+		if (carry == 1) {
+			int[] digits_new = new int[digits.length + 1];
+			System.arraycopy(digits, 0, digits_new, 1, digits.length);
+			digits_new[0] = 1;
+			return digits_new;
+		}
+		return digits;
+	}
+
+	public String countAndSay(int n) {
+		StringBuilder current = new StringBuilder("1");
+		StringBuilder last;
+		for (int i = 1; i < n; i++) {
+			last = current;
+			current = new StringBuilder();
+			char[] str = last.toString().toCharArray();
+			char prev = str[0];
+			int count = 1;
+			for (int j = 1; j < str.length; j++) {
+				if (str[j] != prev) {
+					current.append(count);
+					current.append(prev);
+					count = 1;
+				} else {
+					count++;
+				}
+				prev = str[j];
+			}
+			current.append(count);
+			current.append(prev);
+		}
+		return current.toString();
+
+	}
+
+	public int maxSubArray(int[] nums) {
+		int curr = nums[0];
+		int max = curr;
+		for (int i = 1; i < nums.length; i++) {
+			curr = Math.max(0, curr += nums[i]);
+			max = Math.max(max, curr);
+		}
+		return max;
 	}
 }
