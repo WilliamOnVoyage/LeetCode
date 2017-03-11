@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Simple_solutions {
@@ -297,34 +299,17 @@ public class Simple_solutions {
 
 	// ********* Ransom Note ()
 	public static boolean canConstruct(String ransomNote, String magazine) {
-		HashMap<Character, Integer> Note = new HashMap<Character, Integer>();
-		HashMap<Character, Integer> Mag = new HashMap<Character, Integer>();
-
-		for (int i = 0; i < ransomNote.length(); i++) {
-			if (Note.containsKey(ransomNote.charAt(i))) {
-				Note.put(ransomNote.charAt(i), Note.get(ransomNote.charAt(i) + 1));
-			} else {
-				Note.put(ransomNote.charAt(i), 1);
-			}
+		int[] char_set = new int[128];
+		for (char c : ransomNote.toCharArray()) {
+			char_set[c]++;
 		}
-
-		for (int i = 0; i < magazine.length(); i++) {
-			if (Mag.containsKey(magazine.charAt(i))) {
-				Mag.put(magazine.charAt(i), Mag.get(magazine.charAt(i) + 1));
-			} else {
-				Mag.put(magazine.charAt(i), 1);
-			}
+		for (char c : magazine.toCharArray()) {
+			char_set[c]--;
 		}
-		System.out.println("");
-
-		for (Character c : Note.keySet()) {
-			if (Mag.containsKey(c)) {
-				if (Mag.get(c) - Note.get(c) >= 0)
-					continue;
-			}
-			return false;
+		for (int i : char_set) {
+			if (i > 0)
+				return false;
 		}
-
 		return true;
 	}
 
@@ -480,27 +465,6 @@ public class Simple_solutions {
 
 	// ********* Reverse single linked list
 	public ListNode reverseList(ListNode head) {
-		// if (head == null || head.next == null)
-		// return head;
-		// if (head.next.next == null) {
-		// head.next.next = head;
-		// ListNode tmp = head.next;
-		// head.next = null;
-		// return tmp;
-		// }
-		// ListNode tmp1, tmp2, tmp3;
-		// tmp1 = head;
-		// tmp2 = head.next;
-		// tmp3 = head.next.next;
-		// tmp1.next = null;
-		// while (tmp3 != null) {
-		// tmp2.next = tmp1;
-		// tmp1 = tmp2;
-		// tmp2 = tmp3;
-		// tmp3 = tmp3.next;
-		// }
-		// tmp2.next = tmp1;
-		// return tmp2;
 
 		ListNode newHead = null;
 		while (head != null) {
@@ -1235,4 +1199,54 @@ public class Simple_solutions {
 		}
 		return max;
 	}
+
+	public boolean isPalindrome(ListNode head) {
+		if (head == null)
+			return false;
+		if (head.next == null)
+			return true;
+		ListNode slow = head;
+		ListNode fast = head;
+		while (slow.next != null && fast.next != null && fast.next.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+		ListNode reverse_head = slow.next;
+		slow.next = null;
+		ListNode reversed_head = reverseList(reverse_head);
+		return compareList(head, reversed_head);
+	}
+
+	private boolean compareList(ListNode h1, ListNode h2) {
+		if (h1 == null && h2 == null)
+			return true;
+		if (h1 == null || h2 == null)
+			return false;
+		while (h1 != null && h2 != null) {
+			if (h1.val != h2.val)
+				return false;
+			h1 = h1.next;
+			h2 = h2.next;
+		}
+		return true;
+	}
+
+	public int islandPerimeter(int[][] grid) {
+		int peri = 0;
+		for (int row = 0; row < grid.length; row++) {
+			for (int col = 0; col < grid[row].length; col++) {
+				if (grid[row][col] == 1) {
+					peri += 4;
+					if (row + 1 < grid.length && grid[row + 1][col] == 1) {
+						peri -= 2;
+					}
+					if (col + 1 < grid[row].length && grid[row][col + 1] == 1) {
+						peri -= 2;
+					}
+				}
+			}
+		}
+		return peri;
+	}
+
 }
