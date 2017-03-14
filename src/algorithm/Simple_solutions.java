@@ -692,27 +692,6 @@ public class Simple_solutions {
 	}
 
 	public int lengthOfLongestSubstring(String s) {
-		// Too slow
-		// int[] table = new int[128];
-		// int length = 0;
-		// int st = 0;
-		// for (int i = 0; i < s.length(); i++) {
-		// if (table[(int) s.charAt(i)] == 1) {
-		// table = new int[128];
-		// length = Math.max(i - st, length);
-		// st++;
-		// i=st;
-		// table[(int) s.charAt(st)] = 1;
-		// } else {
-		// table[(int) s.charAt(i)] = 1;
-		// }
-		// if (i == s.length() - 1)
-		// length = Math.max(i - st+1, length);
-		// }
-		// return length;
-
-		// Use hashmap to remember where the duplicate occur,move the st index
-		// to the right of the 1st place of the duplicate
 		if (s.length() == 0)
 			return 0;
 		HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -727,164 +706,36 @@ public class Simple_solutions {
 		return max;
 	}
 
-	public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-		return findSubMedian(nums1, nums2);
+	public double findMedianSortedArrays(int[] A, int[] B) {
+		int l1 = A.length, l2 = B.length;
+		int l = (l1 + l2 + 1) / 2;
+		int r = (l1 + l2 + 2) / 2;
+		return (getkth(A, 0, B, 0, l) + getkth(A, 0, B, 0, r)) / 2.0;
 	}
 
-	private double findSubMedian(int[] nums1, int[] nums2) {
-		if (nums1.length == 0 && nums2.length == 0)
-			return 0;
-		if (nums1.length == 0)
-			return findSubMedian(Arrays.copyOf(nums2, nums2.length), Arrays.copyOf(nums2, nums2.length));
-		if (nums2.length == 0)
-			return findSubMedian(Arrays.copyOf(nums1, nums1.length), Arrays.copyOf(nums1, nums1.length));
-		if (nums1.length == 1 && nums2.length == 1)
-			return (double) (nums1[0] + nums2[0]) / 2;
+	public double getkth(int[] A, int aStart, int[] B, int bStart, int k) {
+		if (aStart > A.length - 1)
+			return B[bStart + k - 1];
+		if (bStart > B.length - 1)
+			return A[aStart + k - 1];
+		if (k == 1)
+			return Math.min(A[aStart], B[bStart]);
 
-		int m1 = 0;
-		double M1 = 0;
-		int[] nums1_left, nums2_left, nums1_right, nums2_right;
-		if (nums1.length % 2 == 0) {
+		int aMid = Integer.MAX_VALUE, bMid = Integer.MAX_VALUE;
+		if (aStart + k / 2 - 1 < A.length)
+			aMid = A[aStart + k / 2 - 1];
+		if (bStart + k / 2 - 1 < B.length)
+			bMid = B[bStart + k / 2 - 1];
 
-			m1 = (nums1.length) / 2;
-			M1 = (double) (nums1[m1] + nums1[m1 - 1]) / 2;
-			nums1_left = Arrays.copyOfRange(nums1, 0, m1);
-			nums1_right = Arrays.copyOfRange(nums1, m1, nums1.length);
-			if (nums2.length == 1) {
-				if (nums2[0] < M1) {
-					return nums1[m1 - 1];
-				} else
-					return nums1[m1];
-			}
-		} else {
-			m1 = (nums1.length - 1) / 2;
-			M1 = (double) nums1[m1];
-			if (m1 != 0) {
-				nums1_left = Arrays.copyOfRange(nums1, 0, m1);
-				nums1_right = Arrays.copyOfRange(nums1, m1 + 1, nums1.length);
-			} else {
-				nums1_left = Arrays.copyOfRange(nums1, 0, 1);
-				nums1_right = Arrays.copyOfRange(nums1, 0, 1);
-			}
-			if (nums2.length == 1) {
-				if (nums2[0] < M1) {
-					return (double) (nums1[m1 - 1] + nums1[m1]) / 2;
-				} else
-					return (double) (nums1[m1 + 1] + nums1[m1]) / 2;
-			}
-		}
-		int m2 = 0;
-		double M2 = 0;
-		if (nums2.length % 2 == 0) {
-			m2 = (nums2.length) / 2;
-			M2 = (double) (nums2[m2] + nums2[m2 - 1]) / 2;
-			nums2_left = Arrays.copyOfRange(nums2, 0, m2);
-			nums2_right = Arrays.copyOfRange(nums2, m2, nums2.length);
-			if (nums1.length == 1) {
-				if (nums1[0] < M2) {
-					return nums2[m2 - 1];
-				} else
-					return nums2[m2];
-			}
-		} else {
-			m2 = (nums2.length - 1) / 2;
-			M2 = (double) nums2[m2];
-			if (m2 != 0) {
-				nums2_left = Arrays.copyOfRange(nums2, 0, m2);
-				nums2_right = Arrays.copyOfRange(nums2, m2 + 1, nums2.length);
-			} else {
-				nums2_left = Arrays.copyOfRange(nums2, 0, 1);
-				nums2_right = Arrays.copyOfRange(nums2, 0, 1);
-			}
-			if (nums1.length == 1) {
-				if (nums1[0] < M2) {
-					return (double) (nums2[m2 - 1] + nums2[m2]) / 2;
-				} else
-					return (double) (nums2[m2 + 1] + nums2[m2]) / 2;
-			}
-		}
-
-		if (M1 == M2)
-			return M1;
-		else if (M1 > M2) {
-			return findSubMedian(nums1_left, nums2_right);
-		} else {
-			return findSubMedian(nums1_right, nums2_left);
-		}
+		if (aMid < bMid)
+			return getkth(A, aStart + k / 2, B, bStart, k - k / 2);// Check:
+																	// aRight +
+																	// bLeft
+		else
+			return getkth(A, aStart, B, bStart + k / 2, k - k / 2);// Check:
+																	// bRight +
+																	// aLeft
 	}
-
-	// Too slow
-	// public String longestPalindrome(String s) {
-	// String palin = "";
-	// if (s != null && s.length() != 0) {
-	// for (int i = 0; i < s.length() - palin.length(); i++) {
-	// for (int j = s.length() - 1; j >= i + palin.length(); j--) {
-	// if (check_Palindrome(s.substring(i, j + 1)) && j - i + 1 >
-	// palin.length()) {
-	// palin = s.substring(i, j + 1);
-	// }
-	// }
-	// }
-	// }
-	//
-	// return palin;
-	// }
-	// public String longestPalindrome(String s) {
-	// String palin = "";
-	// if (s != null && s.length() > 1) {
-	// palin = s.substring(0, 1); // initialize palin at least 1 long
-	// HashMap<int[], Integer> palin_list = new HashMap<>();
-	// // Initialize palindrome seed
-	// int N = 1; // palindrome should be at least 2 long
-	// for (int i = 0; i < s.length() - 1; i++) {
-	// if (check_Palindrome(s.substring(i, i + 2))) {
-	// palin_list.put(new int[] { i, i + 2 }, 2);
-	// N = 2;
-	// }
-	// }
-	// for (int i = 0; i < s.length() - 2; i++) {
-	// if (check_Palindrome(s.substring(i, i + 3))) {
-	// palin_list.put(new int[] { i, i + 3 }, 3);
-	// N = 3;
-	// }
-	// }
-	// // grow the palindrome seed
-	// growseedloop: while (!palin_list.isEmpty()) {
-	// HashMap<int[], Integer> new_palin_list = new HashMap<>();
-	// for (int[] key : palin_list.keySet()) {
-	// int st = key[0];
-	// int ed = key[1];
-	// try {
-	// if (s.charAt(st - 1) == s.charAt(ed)) {
-	// new_palin_list.put(new int[] { st - 1, ed + 1 }, ed - st + 2);
-	// N = ed - st + 2 > N ? ed - st + 2 : N;
-	// }
-	// } catch (Exception e) {
-	// }
-	// }
-	// if (new_palin_list.isEmpty()) { // get the palindrome
-	// for (int[] key : palin_list.keySet()) {
-	// if (palin_list.get(key) == N) {
-	// palin = s.substring(key[0], key[1]);
-	// break growseedloop;
-	// }
-	// }
-	// } else {
-	// palin_list = new HashMap<int[], Integer>(new_palin_list);
-	// }
-	// }
-	// } else {
-	// palin = s.substring(0, 1); // initialize palin at least 1 long
-	// }
-	// return palin;
-	// }
-	// private boolean check_Palindrome(String s) {
-	// if (s.length() <= 1)
-	// return true;
-	// if (s.charAt(0) == s.charAt(s.length() - 1))
-	// return check_Palindrome(s.substring(1, s.length() - 1));
-	// return false;
-	// }
 
 	private int lo, maxLen;
 
@@ -927,37 +778,6 @@ public class Simple_solutions {
 			return l2;
 		}
 	}
-
-	// Too slow
-	// public List<Integer> findAnagrams(String s, String p) {
-	// ArrayList<Integer> r = new ArrayList<>();
-	// String p_sort = sort_char(p);
-	// boolean previous = false;
-	// for (int i = 0; i <= s.length() - p.length(); i++) {
-	// String str = s.substring(i, i + p.length());
-	// if (previous) {
-	// if (str.charAt(p.length() - 1) == s.charAt(i - 1)) {
-	// r.add(i);
-	// previous = true;
-	// continue;
-	// }
-	// }
-	// if (sort_char(str).equals(p_sort)) {
-	// r.add(i);
-	// previous = true;
-	// } else {
-	// previous = false;
-	// }
-	// }
-	// return r;
-	// }
-	//
-	// private String sort_char(String s) {
-	// String r = "";
-	// char[] ch = s.toCharArray();
-	// Arrays.sort(ch);
-	// return r = new String(ch);
-	// }
 
 	public List<Integer> findAnagrams(String s, String p) {
 		ArrayList<Integer> r = new ArrayList<>();
@@ -1113,35 +933,6 @@ public class Simple_solutions {
 		return false;
 	}
 
-	// public int[] countBits(int num) {
-	// if (num == 0)
-	// return new int[1];
-	// int power = cal_p(num);
-	// int[] r = new int[(int) Math.pow(2, power + 1)];
-	// r[0] = 0;
-	// r[1] = 1;
-	// for (int index = 2; index < r.length; index *= 2) {
-	// int mid = (index + index * 2) / 2;
-	// for (int i = index; i < mid; i++) {
-	// r[i] = r[i - index / 2];
-	// }
-	// for (int i = mid; i < index * 2; i++) {
-	// r[i] = r[i - index / 2] + 1;
-	// }
-	// }
-	// r = Arrays.copyOf(r, num + 1);
-	// return r;
-	// }
-	//
-	// private int cal_p(int num) {
-	// int p = 0;
-	// while (num != 0) {
-	// num /= 2;
-	// p++;
-	// }
-	// return p;
-	// }
-
 	// The left shift(*2) does not influence the number of bits, only the last
 	// digit add to it influence
 	public int[] countBits(int num) {
@@ -1234,5 +1025,74 @@ public class Simple_solutions {
 			max = Math.max(max, curr);
 		}
 		return max;
+	}
+
+	public String addBinary(String a, String b) {
+		StringBuilder sb = new StringBuilder();
+		int i = a.length() - 1, j = b.length() - 1, carry = 0;
+		while (i >= 0 || j >= 0) {
+			int sum = carry;
+			if (j >= 0)
+				sum += b.charAt(j--) - '0';
+			if (i >= 0)
+				sum += a.charAt(i--) - '0';
+			sb.append(sum % 2);
+			carry = sum / 2;
+		}
+		if (carry != 0)
+			sb.append(carry);
+		return sb.reverse().toString();
+	}
+
+	public int numIslands(char[][] grid) {
+		if (grid.length == 0 || grid[0].length == 0)
+			return 0;
+		int count = 0;
+		boolean[][] map = new boolean[grid.length][grid[0].length];
+		for (int row = 0; row < grid.length; row++) {
+			for (int col = 0; col < grid[row].length; col++) {
+				if (grid[row][col] == '1' && !map[row][col]) {
+					count++;
+					label_map(grid, row, col);
+				}
+			}
+		}
+		return count;
+	}
+
+	private void label_map(char[][] grid, int row, int col) {
+		if (row >= grid.length || row < 0 || col < 0 || col >= grid[row].length || grid[row][col] != '1')
+			return;
+		grid[row][col] = '0';
+		label_map(grid, row + 1, col);
+		label_map(grid, row - 1, col);
+		label_map(grid, row, col + 1);
+		label_map(grid, row, col - 1);
+	}
+
+	public List<List<Integer>> generate(int numRows) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		List<Integer> prev = null;
+		List<Integer> line = null;
+		for (int i = 1; i <= numRows; i++) {
+			line = Piscal_triangle_single(prev);
+			prev = new ArrayList<Integer>(line);
+			result.add(line);
+		}
+		return result;
+	}
+
+	private List<Integer> Piscal_triangle_single(List<Integer> prev) {
+		List<Integer> line = new ArrayList<>();
+		if (prev == null) {
+			line.add(1);
+		} else {
+			line.add(1);
+			for (int i = 0; i < prev.size() - 1; i++) {
+				line.add(prev.get(i) + prev.get(i + 1));
+			}
+			line.add(1);
+		}
+		return line;
 	}
 }

@@ -104,8 +104,55 @@ public class LFUCache {
 	private void updateNodeinList(ListNode n) {
 		list.put(n.key, n);
 	}
+
+	public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+		ListNode h1 = headA;
+		ListNode h2 = headB;
+		while (h1 != null && h2 != null) {
+			h1 = h1.next;
+			h2 = h2.next;
+		}
+		if (h1 == null) {
+			h1 = headB;
+		} else {
+			h2 = headA;
+		}
+		while (h1 != null && h2 != null) {
+			h1 = h1.next;
+			h2 = h2.next;
+		}
+		if (h1 == null) {
+			h1 = h2;
+			h2 = headB;
+		} else {
+			h2 = h1;
+			h1 = headA;
+		}
+		while (h1 != null && h2 != null) {
+			if (h1 == h2)
+				return h1;
+			h1 = h1.next;
+			h2 = h2.next;
+		}
+		return null;
+	}
+
+	// Bit manipulation (signed and unsigned is critical)
+	public int reverseBits(int n) {
+		int result = 0;
+		for (int i = 0; i < 32; i++) {
+			result += n & 1;
+			n >>>= 1; // CATCH: must do unsigned shift
+			if (i < 31) // CATCH: for last digit, don't shift!
+				result <<= 1;
+		}
+		return result;
+	}
+
+
 }
 
 /**
- * Your LFUCache object will be instantiated and called as such: LFUCache obj = new LFUCache(capacity); int param_1 = obj.get(key); obj.put(key,value);
+ * Your LFUCache object will be instantiated and called as such: LFUCache obj =
+ * new LFUCache(capacity); int param_1 = obj.get(key); obj.put(key,value);
  */

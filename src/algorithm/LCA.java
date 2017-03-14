@@ -15,54 +15,18 @@ public class LCA {
 	}
 
 	public class Solution {
-
-		private Stack<TreeNode> sp;
-		private Stack<TreeNode> sq;
-
+		// For binary tree
 		public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-			if (root.val == p.val || root.val == q.val || p == null || q == null)
+			if (root == null || root == p || root == q)
 				return root;
-			sp = new Stack<>();
-			sq = new Stack<>();
-			findp(root, p);
-			findq(root, q);
-			TreeNode t = root;
-			while (sp.peek() == sq.peek()) {
-				t = sp.pop();
-				sq.pop();
-				if (sp.isEmpty() || sq.isEmpty())
-					break;
-			}
-			return t;
+			TreeNode left = lowestCommonAncestor(root.left, p, q);
+			TreeNode right = lowestCommonAncestor(root.right, p, q);
+			return left == null ? right : right == null ? left : root;
 		}
 
-		private boolean findp(TreeNode parent, TreeNode p) {
-			if (parent == null)
-				return false;
-			if (parent.left.val == p.val || parent.right.val == p.val) {
-				sp.push(parent);
-				return true;
-			}
-			boolean found = findp(parent.left, p) || findp(parent.right, p);
-			if (found)
-				sp.push(parent);
-			return found;
-		}
-
-		private boolean findq(TreeNode parent, TreeNode q) {
-			if (parent == null)
-				return false;
-			if (parent.left.val == q.val || parent.right.val == q.val) {
-				sq.push(parent);
-				return true;
-			}
-			boolean found = findq(parent.left, q) || findq(parent.right, q);
-			if (found)
-				sq.push(parent);
-			return found;
-		}
 		// For BST
-		// public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		// public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p,
+		// TreeNode q) {
 		// while ((root.val - p.val) * (root.val - q.val) > 0)
 		// root = p.val < root.val ? root.left : root.right;
 		// return root;
