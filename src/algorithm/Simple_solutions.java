@@ -1318,4 +1318,25 @@ public class Simple_solutions {
 		prev.next = slow.next;
 		return dummy.next;
 	}
+
+	public String reverseWords(String s) {
+		String[] words = s.trim().split("\\s+");
+		StringBuilder sb = new StringBuilder();
+		for (int i = words.length - 1; i >= 0; i--) {
+			sb.append(words[i]);
+			if (i > 0)
+				sb.append(" ");
+		}
+		return sb.toString();
+	}
+
+    public double myPow(double x, int n) {
+        if(n == 0)
+            return 1;
+        if(n<0){
+            n = -n;
+            x = 1/x;
+        }
+        return (n%2 == 0) ? myPow(x*x, n/2) : x*myPow(x*x, n/2);
+    }
 }
