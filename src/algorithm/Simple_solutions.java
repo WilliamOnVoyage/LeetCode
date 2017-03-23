@@ -907,10 +907,6 @@ public class Simple_solutions {
 		return f;
 	}
 
-	public void merge(int[] nums1, int m, int[] nums2, int n) {
-
-	}
-
 	public String convert(String s, int numRows) {
 		int n = s.length();
 		if (n == 0 || numRows <= 1 || numRows >= n)
@@ -1330,13 +1326,39 @@ public class Simple_solutions {
 		return sb.toString();
 	}
 
-    public double myPow(double x, int n) {
-        if(n == 0)
-            return 1;
-        if(n<0){
-            n = -n;
-            x = 1/x;
-        }
-        return (n%2 == 0) ? myPow(x*x, n/2) : x*myPow(x*x, n/2);
-    }
+	public double myPow(double x, int n) {
+		if (n == 0)
+			return 1;
+		if (n < 0) {
+			n = -n;
+			x = 1 / x;
+		}
+		return (n % 2 == 0) ? myPow(x * x, n / 2) : x * myPow(x * x, n / 2);
+	}
+
+	public void merge(int[] nums1, int m, int[] nums2, int n) {
+		int index = m + n - 1;
+		int i = m - 1;
+		int j = n - 1;
+		while (i >= 0 && j >= 0) {
+			if (nums1[i] < nums2[j]) {
+				nums1[index] = nums2[j];
+				j--;
+			} else {
+				nums1[index] = nums1[i];
+				i--;
+			}
+			index--;
+		}
+		while (j >= 0) {
+			nums1[index] = nums2[j];
+			j--;
+			index--;
+		}
+	}
+
+	public int findKthLargest(int[] nums, int k) {
+		Arrays.sort(nums);
+		return nums[nums.length - k];
+	}
 }
