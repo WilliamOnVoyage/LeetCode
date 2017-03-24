@@ -2,13 +2,9 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -749,7 +745,6 @@ public class Simple_solutions {
 		if (s == null || s.length() == 0 || p == null || p.length() == 0)
 			return r;
 		int[] hash = new int[128];
-		int[] gt = new int[128];
 		for (char c : p.toCharArray()) {
 			hash[c]++;
 		}

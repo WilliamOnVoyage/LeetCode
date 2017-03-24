@@ -14,6 +14,7 @@ public class MyStack { // Tricky and efficient
 		queue = q;
 	}
 
+	@SuppressWarnings("unchecked")
 	public int pop() {
 		int r = (int) queue.poll();
 		queue = (Queue<Object>) queue.peek();

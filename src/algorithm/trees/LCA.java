@@ -1,7 +1,5 @@
 package algorithm.trees;
 
-import java.util.Stack;
-
 public class LCA {
 
 	public class TreeNode {

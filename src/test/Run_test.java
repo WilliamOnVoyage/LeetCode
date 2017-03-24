@@ -1,7 +1,5 @@
 package test;
 
-import java.util.Arrays;
-
 import algorithm.Simple_solutions;
 
 public class Run_test {
