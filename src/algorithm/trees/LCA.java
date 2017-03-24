@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.trees;
 
 import java.util.Stack;
 
