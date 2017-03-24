@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 public class Simple_solutions {
@@ -906,10 +907,6 @@ public class Simple_solutions {
 		return f;
 	}
 
-	public void merge(int[] nums1, int m, int[] nums2, int n) {
-
-	}
-
 	public String convert(String s, int numRows) {
 		int n = s.length();
 		if (n == 0 || numRows <= 1 || numRows >= n)
@@ -1040,4 +1037,328 @@ public class Simple_solutions {
 		return peri;
 	}
 
+	public int thirdMax(int[] nums) {
+		Integer max1 = null;
+		Integer max2 = null;
+		Integer max3 = null;
+		for (Integer n : nums) {
+			if (n.equals(max1) || n.equals(max2) || n.equals(max3))
+				continue;
+			if (max1 == null || n > max1) {
+				max3 = max2;
+				max2 = max1;
+				max1 = n;
+			} else if (max2 == null || n > max2) {
+				max3 = max2;
+				max2 = n;
+			} else if (max3 == null || n > max3) {
+				max3 = n;
+			}
+		}
+		return max3 == null ? max1 : max3;
+	}
+
+	public boolean canPermutePalindrome(String s) {
+		char[] ch = s.toCharArray();
+		int[] array = new int[128];
+		boolean odd = false;
+		for (char c : ch) {
+			array[c]++;
+		}
+		for (int i : array) {
+			if (i % 2 == 1) {
+				if (odd)
+					return false;
+				else
+					odd = true;
+			}
+		}
+		return true;
+	}
+
+	public boolean repeatedSubstringPattern(String s) {
+		Set<Integer> length = factors(s.length());
+		if (length != null) {
+			for (int i : length) {
+				String sub = s.substring(0, i);
+				int j = i;
+				for (; j < s.length(); j += i) {
+					if (!s.substring(j, j + i).equals(sub)) {
+						break;
+					}
+					if (j == s.length() - i) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private Set<Integer> factors(int num) {
+		if (num < 1)
+			return null;
+		Set<Integer> r = new HashSet<>();
+		for (int i = 1; i <= num / 2; i++) {
+			if (num % i == 0)
+				r.add(i);
+		}
+		return r;
+	}
+
+	public int removeElement(int[] nums, int val) {
+		if (nums.length < 1)
+			return 0;
+		int st = 0;
+		int ed = nums.length - 1;
+		while (st < ed) {
+			if (nums[st] != val)
+				st++;
+			if (nums[ed] == val)
+				ed--;
+			if (nums[st] == val && nums[ed] != val) {
+				nums[st] = nums[ed];
+				nums[ed] = val;
+				st++;
+				ed--;
+			}
+		}
+		if (st == ed && ed == 0)
+			ed = -1;
+		return ed + 1;
+	}
+
+	public int missingNumber(int[] nums) {
+		int sum = 0;
+		int n = nums.length;
+		int e = n * (n + 1) / 2;
+		for (int i : nums) {
+			sum += i;
+		}
+		return e - sum;
+	}
+
+	public int findDuplicate(int[] nums) {
+		if (nums.length > 1) {
+			int slow = nums[0];
+			int fast = nums[nums[0]];
+			while (slow != fast) {
+				slow = nums[slow];
+				fast = nums[nums[fast]];
+			}
+			fast = 0;
+			while (slow != fast) {
+				slow = nums[slow];
+				fast = nums[fast];
+			}
+			return slow;
+		}
+		return -1;
+	}
+
+	public ListNode detectCycle(ListNode head) {
+		if (head == null || head.next == null || head.next.next == null)
+			return null;
+		ListNode slow = head.next;
+		ListNode fast = head.next.next;
+		while (slow != fast) {
+			if (fast == null || fast.next == null)
+				return null;
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+		fast = head;
+		while (slow != fast) {
+			slow = slow.next;
+			fast = fast.next;
+		}
+		return slow;
+	}
+
+	public TreeNode sortedArrayToBST(int[] nums) {
+		if (nums == null || nums.length == 0)
+			return null;
+		int mid = nums.length / 2;
+		TreeNode root = new TreeNode(nums[mid]);
+		root.left = sortedArrayToBST(Arrays.copyOfRange(nums, 0, mid));
+		root.right = sortedArrayToBST(Arrays.copyOfRange(nums, mid + 1, nums.length));
+		return root;
+	}
+
+	public TreeNode sortedListToBST(ListNode head) {
+		List<Integer> arr = new ArrayList<>();
+		while (head != null) {
+			arr.add(head.val);
+			head = head.next;
+		}
+		int[] a = new int[arr.size()];
+		for (int i = 0; i < a.length; i++) {
+			a[i] = arr.get(i);
+		}
+		return sortedArrayToBST(a);
+	}
+
+	public boolean isValidBST(TreeNode root) {
+		return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+	}
+
+	public boolean isValidBST(TreeNode root, long minVal, long maxVal) {
+		if (root == null)
+			return true;
+		if (root.val >= maxVal || root.val <= minVal)
+			return false;
+		return isValidBST(root.left, minVal, root.val) && isValidBST(root.right, root.val, maxVal);
+	}
+
+	public int findPairs(int[] nums, int k) {
+		Arrays.sort(nums);
+		int count = 0;
+		int prev = Integer.MIN_VALUE;
+		for (int i = 0; i < nums.length; i++) {
+			if (nums[i] != prev) {
+				if (binary_search_pair(nums, nums[i] + k, i + 1, nums.length - 1))
+					count++;
+				prev = nums[i];
+			}
+		}
+		return count;
+	}
+
+	private boolean binary_search_pair(int nums[], int t, int st, int ed) {
+		if (st > ed)
+			return false;
+		int mid = (st + ed) / 2;
+		if (nums[mid] < t)
+			return binary_search_pair(nums, t, mid + 1, ed);
+		else if (nums[mid] > t)
+			return binary_search_pair(nums, t, st, mid - 1);
+		else
+			return true;
+	}
+
+	public boolean isIsomorphic(String s1, String s2) {
+		int[] m = new int[512];
+		for (int i = 0; i < s1.length(); i++) {
+			if (m[s1.charAt(i)] != m[s2.charAt(i) + 256])
+				return false;
+			m[s1.charAt(i)] = m[s2.charAt(i) + 256] = i + 1;
+		}
+		return true;
+	}
+
+	public int[] twoSum(int[] nums, int target) {
+		HashMap<Integer, Integer> tracker = new HashMap<Integer, Integer>();
+		int len = nums.length;
+		for (int i = 0; i < len; i++) {
+			if (tracker.containsKey(nums[i])) {
+				int left = tracker.get(nums[i]);
+				return new int[] { left, i };
+			} else {
+				tracker.put(target - nums[i], i);
+			}
+		}
+		return new int[2];
+	}
+
+	public int maxArea(int[] height) {
+		int left = 0, right = height.length - 1;
+		int maxArea = 0;
+
+		while (left < right) {
+			maxArea = Math.max(maxArea, Math.min(height[left], height[right]) * (right - left));
+			if (height[left] < height[right])
+				left++;
+			else
+				right--;
+		}
+		return maxArea;
+	}
+
+	public ListNode swapPairs(ListNode head) {
+		if (head != null && head.next != null) {
+			ListNode dummy = new ListNode(0);
+			dummy.next = head;
+			ListNode slow = head;
+			ListNode fast = head.next;
+			ListNode prev = dummy;
+			while (slow != null && fast != null) {
+				slow.next = fast.next;
+				fast.next = slow;
+				prev.next = fast;
+				prev = slow;
+				fast = slow.next == null ? null : slow.next.next;
+				slow = slow.next;
+			}
+			return dummy.next;
+		}
+		return head;
+	}
+
+	public ListNode removeNthFromEnd(ListNode head, int n) {
+		ListNode slow = head;
+		ListNode fast = head;
+		ListNode dummy = new ListNode(0);
+		ListNode prev = dummy;
+		dummy.next = head;
+		while (n != 0) {
+			if (fast == null)
+				return head;
+			fast = fast.next;
+			n--;
+		}
+		while (fast != null) {
+			prev = slow;
+			slow = slow.next;
+			fast = fast.next;
+		}
+		prev.next = slow.next;
+		return dummy.next;
+	}
+
+	public String reverseWords(String s) {
+		String[] words = s.trim().split("\\s+");
+		StringBuilder sb = new StringBuilder();
+		for (int i = words.length - 1; i >= 0; i--) {
+			sb.append(words[i]);
+			if (i > 0)
+				sb.append(" ");
+		}
+		return sb.toString();
+	}
+
+	public double myPow(double x, int n) {
+		if (n == 0)
+			return 1;
+		if (n < 0) {
+			n = -n;
+			x = 1 / x;
+		}
+		return (n % 2 == 0) ? myPow(x * x, n / 2) : x * myPow(x * x, n / 2);
+	}
+
+	public void merge(int[] nums1, int m, int[] nums2, int n) {
+		int index = m + n - 1;
+		int i = m - 1;
+		int j = n - 1;
+		while (i >= 0 && j >= 0) {
+			if (nums1[i] < nums2[j]) {
+				nums1[index] = nums2[j];
+				j--;
+			} else {
+				nums1[index] = nums1[i];
+				i--;
+			}
+			index--;
+		}
+		while (j >= 0) {
+			nums1[index] = nums2[j];
+			j--;
+			index--;
+		}
+	}
+
+	public int findKthLargest(int[] nums, int k) {
+		Arrays.sort(nums);
+		return nums[nums.length - k];
+	}
 }
