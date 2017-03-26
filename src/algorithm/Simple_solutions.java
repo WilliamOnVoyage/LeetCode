@@ -2,6 +2,8 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1355,5 +1357,65 @@ public class Simple_solutions {
 	public int findKthLargest(int[] nums, int k) {
 		Arrays.sort(nums);
 		return nums[nums.length - k];
+	}
+
+	public String reverseVowels(String s) {
+		Set<Character> set = new HashSet<>();
+		set.add('a');
+		set.add('e');
+		set.add('i');
+		set.add('o');
+		set.add('u');
+		set.add('A');
+		set.add('E');
+		set.add('I');
+		set.add('O');
+		set.add('U');
+		char[] ch = s.toCharArray();
+		int st = 0, ed = ch.length - 1;
+		while (st < ed) {
+			if (!set.contains(ch[st]))
+				st++;
+			if (!set.contains(ch[ed]))
+				ed--;
+			if (set.contains(ch[st]) && set.contains(ch[ed])) {
+				char temp = ch[st];
+				ch[st] = ch[ed];
+				ch[ed] = temp;
+				st++;
+				ed--;
+			}
+		}
+		return new String(ch);
+	}
+
+	public List<String> generatePossibleNextMoves(String s) {
+		List<String> r = new ArrayList<>();
+		char[] ch = s.toCharArray();
+		for (int i = 0; i < ch.length - 1; i++) {
+			if (ch[i] == '+' && ch[i + 1] == '+') {
+				ch[i] = ch[i + 1] = '-';
+				r.add(new String(ch));
+				ch[i] = ch[i + 1] = '+';
+			}
+		}
+		return r;
+	}
+
+	public int hIndex(int[] citations) {
+		Arrays.sort(citations);
+		int N = citations.length;
+		if (N == 0 || citations[N - 1] == 0)
+			return 0;
+		int i = N - 1;
+		int h = 0;
+		for (; i >= 1; i--) {
+			if (citations[i] >= N - i) {
+				h = N - i;
+			}
+			if (citations[i] < N - i)
+				break;
+		}
+		return h;
 	}
 }

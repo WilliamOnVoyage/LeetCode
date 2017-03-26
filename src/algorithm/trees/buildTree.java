@@ -35,7 +35,7 @@ public class buildTree {
 			}
 		}
 		root.left = buildTree_recursive(preorder, inorder, p_st + 1, i_st, mid);
-		root.right = buildTree_recursive(preorder, inorder, mid + 1, mid + 1, i_ed);
+		root.right = buildTree_recursive(preorder, inorder, p_st + mid + 1 - i_st, mid + 1, i_ed);
 		return root;
 	}
 }
