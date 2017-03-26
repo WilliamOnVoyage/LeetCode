@@ -1,8 +1,6 @@
 package algorithm.trees;
 
-import java.util.Arrays;
-
-public class buildTree {
+public class BuildTree {
 
 	class TreeNode {
 		int val;
