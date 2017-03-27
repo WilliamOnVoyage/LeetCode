@@ -96,21 +96,6 @@ public class Simple_solutions {
 
 	// ********* Add digit (O(1), mathematical representation of decimals)
 	public int addDigits(int num) {
-		// int sum = 0;
-		// while (true) {
-		// sum += num % 10;
-		// num /= 10;
-		// if (num == 0) {
-		// if (sum < 10)
-		// break;
-		// else {
-		// num = sum;
-		// sum = 0;
-		// }
-		// }
-		// }
-		// return sum;
-
 		return 1 + (num - 1) % 9; // O(1)
 	}
 
@@ -131,29 +116,6 @@ public class Simple_solutions {
 		int left = maxDepth(root.left);
 		int right = maxDepth(root.right);
 		return 1 + (left > right ? left : right);
-
-		// if(root == NULL)
-		// return 0;
-		//
-		// int res = 0;
-		// queue<TreeNode *> q;
-		// q.push(root);
-		// while(!q.empty())
-		// {
-		// ++ res;
-		// for(int i = 0, n = q.size(); i < n; ++ i)
-		// {
-		// TreeNode *p = q.front();
-		// q.pop();
-		//
-		// if(p -> left != NULL)
-		// q.push(p -> left);
-		// if(p -> right != NULL)
-		// q.push(p -> right);
-		// }
-		// }
-		//
-		// return res;
 	}
 
 	// ********* Min depth (leave nodes)
@@ -228,35 +190,6 @@ public class Simple_solutions {
 
 	// ********* Move zeros
 	public void moveZeroes(int[] nums) {
-		// for (int i = 0; i < nums.length - 1; i++) {
-		// for (int j = 0; j < nums.length - i - 1; j++) {
-		// if (nums[j] == 0 && nums[j + 1] != 0) {
-		// nums[j] = nums[j + 1];
-		// nums[j + 1] = 0;
-		// }
-		// }
-		// }
-
-		// int start = 0, non_zero = 0, counter = 0;
-		// while (start < nums.length - 1) {
-		// if (nums[start] != 0) {
-		// start++;
-		// } else {
-		// non_zero = start;
-		// while (nums[non_zero] == 0 && non_zero < nums.length - 1)
-		// non_zero++;
-		//
-		// if (nums[non_zero] != 0) {
-		// nums[start] = nums[non_zero];
-		// nums[non_zero] = 0;
-		// start++;
-		// counter++;
-		// } else {
-		// break;
-		// }
-		// }
-		// }
-
 		if (nums.length == 0 || nums == null)
 			return;
 		int index = 0;
@@ -322,28 +255,6 @@ public class Simple_solutions {
 
 	// ********* Valid anagram
 	public boolean isAnagram(String s, String t) {
-		// sort s
-		// if (s.length() != t.length())
-		// return false;
-		//
-		// Character[] char_s = new Character[s.length()];
-		// Character[] char_t = new Character[s.length()];
-		// for (int i = 0; i < s.length(); i++) {
-		// char_s[i] = s.charAt(i);
-		// char_t[i] = t.charAt(i);
-		// }
-		//
-		// Arrays.sort(char_s);
-		// Arrays.sort(char_t);
-		//
-		// for (int i = 0; i < s.length(); i++) {
-		// if (char_s[i] != char_t[i])
-		// return false;
-		// }
-		// // sort t
-		// // compare, if equals true; else false
-		// return true;
-
 		int[] alphabet = new int[26];
 		for (int i = 0; i < s.length(); i++)
 			alphabet[s.charAt(i) - 'a']++;
@@ -357,20 +268,6 @@ public class Simple_solutions {
 
 	// First unique character
 	public int firstUniqChar(String s) {
-		// HashMap<Character, Integer> s_map = new HashMap<>();
-		// for (int i = 0; i < s.length(); i++) {
-		// if (s_map.containsKey(s.charAt(i)))
-		// s_map.put(s.charAt(i), s.length());
-		// else
-		// s_map.put(s.charAt(i), i);
-		// }
-		// int min = s.length();
-		// for (Character c : s_map.keySet()) {
-		// if (s_map.get(c) < min)
-		// min = s_map.get(c);
-		// }
-		// return min == s.length() ? -1 : min;
-
 		int freq[] = new int[26];
 		for (int i = 0; i < s.length(); i++)
 			freq[s.charAt(i) - 'a']++;
@@ -381,59 +278,12 @@ public class Simple_solutions {
 	}
 
 	public int majorityElement(int[] nums) {
-		// HashMap<Integer, Integer> num_list = new HashMap<Integer, Integer>();
-		// int major = 0;
-		//
-		// for (int i = 0; i < nums.length; i++) {
-		// if (num_list.containsKey(nums[i])) {
-		// num_list.put(nums[i], num_list.get(nums[i]) + 1);
-		// } else
-		// num_list.put(nums[i], 1);
-		// }
-		//
-		// for (Integer i : num_list.keySet()) {
-		// if (num_list.get(i) > Math.floor(nums.length / 2)) {
-		// major = i;
-		// break;
-		// }
-		// }
-		// return major;
-
 		Arrays.sort(nums);
 		return nums[(int) Math.floor(nums.length / 2)];
 	}
 
 	// ********* Array intersection II(Sort and use two pointers)
 	public static int[] intersect(int[] nums1, int[] nums2) {
-		// int[] result;
-		// HashMap<Integer, Integer> index_list = new HashMap<>();
-		//
-		// int[] short_num, long_num;
-		// if (nums1.length > nums2.length) {
-		// short_num = nums2;
-		// long_num = nums1;
-		// } else {
-		// short_num = nums1;
-		// long_num = nums2;
-		// }
-		//
-		// for (int i = 0; i < long_num.length; i++) {
-		// for (int j = 0; j < short_num.length; j++) {
-		// if (index_list.containsKey(j))
-		// continue;
-		// if (long_num[i] == short_num[j]) {
-		// index_list.put(j, short_num[j]);
-		// break;
-		// }
-		// }
-		// }
-		// result = new int[index_list.size()];
-		// int index = 0;
-		// for (Integer i : index_list.keySet()) {
-		// result[index] = short_num[i];
-		// index++;
-		// }
-		// return result;
 
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		Arrays.sort(nums1);
@@ -475,31 +325,11 @@ public class Simple_solutions {
 
 	// ********* Power of 3 (Factors)
 	public boolean isPowerOfThree(int n) {
-		// if (n == 0)
-		// return false;
-		// while (n != 1) {
-		// if (n % 3 != 0)
-		// return false;
-		// n /= 3;
-		// }
-		// return true;
-
 		return (n > 0 && Math.pow(3, 19) % n == 0);
 	}
 
 	// ********* Power of 2 (Binary, bit manipulation)
 	public boolean isPowerOfTwo(int n) {
-		// if (n <= 0)
-		// return false;
-		// int sum = 0;
-		// while (n > 0) {
-		// sum += n & 1;
-		// n >>= 1;
-		// if (sum > 1)
-		// return false;
-		// }
-		// return true;
-		//
 		return n > 0 && Integer.bitCount(n) == 1;
 	}
 
@@ -604,16 +434,6 @@ public class Simple_solutions {
 	}
 
 	public int hammingDistance(int x, int y) {
-		// int z = x ^ y;
-		// int count = 0;
-		// while (z != 0) {
-		// if (z % 2 != 0) {
-		// count++;
-		// }
-		// z = z / 2;
-		// }
-		// return count;
-		// simplest bit operation, faster than dividend
 		int z = x ^ y;
 		int count = 0;
 		while (z != 0) {
@@ -621,7 +441,6 @@ public class Simple_solutions {
 			z = z >> 1;
 		}
 		return count;
-
 		// One line code using lib function, slow
 		// return Integer.bitCount(x ^ y);
 	}
@@ -631,20 +450,6 @@ public class Simple_solutions {
 	}
 
 	public int findMaxConsecutiveOnes(int[] nums) {
-		// int count = 0;
-		// int s = 0, e = 0;
-		// while (e < nums.length) {
-		// if (nums[s] == 1) {
-		// e = s;
-		// while (nums[e] == 1) {
-		// e++;
-		// }
-		// count = e - s > count ? e - s : count;
-		// s = e;
-		// }
-		// s++;
-		// }
-		// return count;
 		// Use 0 to reset counter, slow
 		int maxHere = 0, max = 0;
 		for (int n : nums)
@@ -763,7 +568,7 @@ public class Simple_solutions {
 		return r;
 	}
 
-	// RETHINK THIS
+	// *RETHINK THIS
 	public int trailingZeroes(int n) {
 		return n == 0 ? 0 : n / 5 + trailingZeroes(n / 5);
 	}
@@ -1415,5 +1220,38 @@ public class Simple_solutions {
 				break;
 		}
 		return h;
+	}
+
+	public int threeSumClosest(int[] nums, int target) {
+		int sum = 0;
+		int err = Integer.MAX_VALUE;
+		Arrays.sort(nums);
+		for (int i = 0; i < nums.length - 2; i++) {
+			// -err-(a-t)<=b+c<=err-(a-t)
+			int st = i + 1, ed = nums.length - 1;
+			while (st < ed) {
+				if (Math.abs(nums[st] + nums[ed] + nums[i] - target) >= err) {
+					if (nums[st] + nums[ed] + nums[i] > target) {
+						ed--;
+					} else {
+						st++;
+					}
+				} else {
+					sum = nums[i] + nums[st] + nums[ed];
+					err = Math.abs(sum - target);
+				}
+			}
+		}
+		return sum;
+	}
+
+	public int searchInsert(int[] nums, int target) {
+		int index = 0;
+		while (index < nums.length) {
+			if (nums[index] >= target)
+				break;
+			index++;
+		}
+		return index;
 	}
 }
