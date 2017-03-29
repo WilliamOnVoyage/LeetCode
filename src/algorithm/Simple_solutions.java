@@ -12,12 +12,12 @@ public class Simple_solutions {
 
 	// *********Reverse String
 	String reverseString(String s) {
-		String new_s = "";
+		StringBuilder sb = new StringBuilder();
 
 		for (int i = s.length() - 1; i >= 0; i--) {
-			new_s += s.charAt(i);
+			sb.append(s.charAt(i));
 		}
-		return new_s;
+		return sb.toString();
 	}
 
 	// *********Nim Game
@@ -1253,5 +1253,56 @@ public class Simple_solutions {
 			index++;
 		}
 		return index;
+	}
+
+	public void reverseWords(char[] s) {
+		reverseWordbyrange(s, 0, s.length);
+		for (int i = 0, j = 0; j < s.length;) {
+			if (s[j] == ' ') {
+				reverseWordbyrange(s, i, j);
+				i = j + 1;
+			}
+			if (j == s.length - 1) {
+				reverseWordbyrange(s, i, j + 1);
+			}
+			j++;
+		}
+	}
+
+	private void reverseWordbyrange(char[] s, int st, int ed) {
+		int i = st, j = ed - 1;
+		while (i < j) {
+			char temp = s[i];
+			s[i] = s[j];
+			s[j] = temp;
+			i++;
+			j--;
+		}
+	}
+
+	public void setZeroes(int[][] matrix) {
+		int m = matrix.length;
+		int n = matrix[0].length;
+		boolean row_0 = false;
+
+		for (int row = 0; row < m; row++) {
+			if (matrix[row][0] == 0)
+				row_0 = true;
+			for (int col = 1; col < n; col++) {
+				if (matrix[row][col] == 0) {
+					matrix[row][0] = matrix[0][col] = 0;
+				}
+			}
+		}
+
+		for (int row = m - 1; row >= 0; row--) {
+			for (int col = n - 1; col >= 1; col--) {
+				if (matrix[row][0] == 0 || matrix[0][col] == 0) {
+					matrix[row][col] = 0;
+				}
+			}
+			if (row_0)
+				matrix[row][0] = 0;
+		}
 	}
 }

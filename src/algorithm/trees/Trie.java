@@ -8,7 +8,8 @@ import java.util.Set;
 public class Trie {
 	class TreeNode {
 		String val;
-		List<TreeNode> next;
+		List<TreeNode> next; // This can be set as TreeNode[26] for tries only
+								// containing a-z
 
 		TreeNode(String x) {
 			val = x;
