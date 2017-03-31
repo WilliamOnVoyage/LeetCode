@@ -1,155 +1,118 @@
 package algorithm.linklist;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 public class LFUCache {
+    private Node head = null;
+    private int cap = 0;
+    private HashMap<Integer, Integer> valueHash = null;
+    private HashMap<Integer, Node> nodeHash = null;
+    
+    public LFUCache(int capacity) {
+        this.cap = capacity;
+        valueHash = new HashMap<Integer, Integer>();
+        nodeHash = new HashMap<Integer, Node>();
+    }
+    
+    public int get(int key) {
+        if (valueHash.containsKey(key)) {
+            increaseCount(key);
+            return valueHash.get(key);
+        }
+        return -1;
+    }
+    
+    public void set(int key, int value) {
+        if ( cap == 0 ) return;
+        if (valueHash.containsKey(key)) {
+            valueHash.put(key, value);
+        } else {
+            if (valueHash.size() < cap) {
+                valueHash.put(key, value);
+            } else {
+                removeOld();
+                valueHash.put(key, value);
+            }
+            addToHead(key);
+        }
+        increaseCount(key);
+    }
+    
+    private void addToHead(int key) {
+        if (head == null) {
+            head = new Node(0);
+            head.keys.add(key);
+        } else if (head.count > 0) {
+            Node node = new Node(0);
+            node.keys.add(key);
+            node.next = head;
+            head.prev = node;
+            head = node;
+        } else {
+            head.keys.add(key);
+        }
+        nodeHash.put(key, head);      
+    }
+    
+    private void increaseCount(int key) {
+        Node node = nodeHash.get(key);
+        node.keys.remove(key);
+        
+        if (node.next == null) {
+            node.next = new Node(node.count+1);
+            node.next.prev = node;
+            node.next.keys.add(key);
+        } else if (node.next.count == node.count+1) {
+            node.next.keys.add(key);
+        } else {
+            Node tmp = new Node(node.count+1);
+            tmp.keys.add(key);
+            tmp.prev = node;
+            tmp.next = node.next;
+            node.next.prev = tmp;
+            node.next = tmp;
+        }
 
-	class ListNode {
-		int val;
-		int key;
-		int freq = 0;
-		ListNode next;
-		ListNode prev;
-
-		ListNode(int key, int val) {
-			this.key = key;
-			this.val = val;
-			this.freq = 1;
-			this.prev = null;
-			this.next = null;
-		}
-	}
-
-	private HashMap<Integer, ListNode> list = new HashMap<>();
-	private ListNode head = null;
-	private ListNode tail = null;
-	private int cap = 0;
-
-	public LFUCache(int capacity) {
-		if (capacity > 0) {
-			cap = capacity;
-		} else {
-			System.out.println("Capacity should be positive integer!");
-			return;
-		}
-	}
-
-	public int get(int key) {
-		int val = -1;
-		ListNode n = containsKey(key);
-		if (n != null) {
-			val = n.val;
-			useKeyNode(n);
-		}
-		return val;
-	}
-
-	public void put(int key, int value) {
-		ListNode n = containsKey(key);
-		if (n != null) { // key already in
-			n.val = value;
-			useKeyNode(n);
-		} else {
-			if (list.size() == cap) {// remove head
-				if (head.next != null) { // more than 1 element
-					head.next.prev = null;
-					updateNodeinList(head.next);
-				}
-				ListNode temp = head;
-				head = head.next;
-				temp.next = null;
-				temp.prev = null;
-				int temp_key = temp.key;
-				temp = null;
-				list.remove(temp_key);
-			}
-			ListNode new_element = new ListNode(key, value);
-			if (head != null && tail != null) { // Add to tail
-				tail.next = new_element;
-				updateNodeinList(tail);
-				new_element.prev = tail;
-				tail = tail.next;
-			} else { // Initialize the head element
-				head = new_element;
-				tail = head;
-			}
-			updateNodeinList(new_element);
-		}
-	}
-
-	private ListNode containsKey(int key) {
-		return list.get(key);
-	}
-
-	private void useKeyNode(ListNode node) {
-		node.freq++;
-		if (node.next != null) {
-			if (node.prev == null) {// head element
-				head = node.next;
-			} else {
-				node.prev.next = node.next;
-				updateNodeinList(node.prev);
-			}
-			node.next.prev = node.prev;
-			updateNodeinList(node.next);
-			node.next = null;
-			tail.next = node;
-			node.prev = tail;
-			updateNodeinList(node);
-			updateNodeinList(tail);
-			tail = tail.next;
-		} // else the element is the last one, do nothing
-	}
-
-	private void updateNodeinList(ListNode n) {
-		list.put(n.key, n);
-	}
-
-	public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-		ListNode h1 = headA;
-		ListNode h2 = headB;
-		while (h1 != null && h2 != null) {
-			h1 = h1.next;
-			h2 = h2.next;
-		}
-		if (h1 == null) {
-			h1 = headB;
-		} else {
-			h2 = headA;
-		}
-		while (h1 != null && h2 != null) {
-			h1 = h1.next;
-			h2 = h2.next;
-		}
-		if (h1 == null) {
-			h1 = h2;
-			h2 = headB;
-		} else {
-			h2 = h1;
-			h1 = headA;
-		}
-		while (h1 != null && h2 != null) {
-			if (h1 == h2)
-				return h1;
-			h1 = h1.next;
-			h2 = h2.next;
-		}
-		return null;
-	}
-
-	// Bit manipulation (signed and unsigned is critical)
-	public int reverseBits(int n) {
-		int result = 0;
-		for (int i = 0; i < 32; i++) {
-			result += n & 1;
-			n >>>= 1; // CATCH: must do unsigned shift
-			if (i < 31) // CATCH: for last digit, don't shift!
-				result <<= 1;
-		}
-		return result;
-	}
-
-
+        nodeHash.put(key, node.next);
+        if (node.keys.size() == 0) remove(node);
+    }
+    
+    private void removeOld() {
+        if (head == null) return;
+        int old = 0;
+        for (int n: head.keys) {
+            old = n;
+            break;
+        }
+        head.keys.remove(old);
+        if (head.keys.size() == 0) remove(head);
+        nodeHash.remove(old);
+        valueHash.remove(old);
+    }
+    
+    private void remove(Node node) {
+        if (node.prev == null) {
+            head = node.next;
+        } else {
+            node.prev.next = node.next;
+        } 
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        }
+    }
+    
+    class Node {
+        public int count = 0;
+        public LinkedHashSet<Integer> keys = null;
+        public Node prev = null, next = null;
+        
+        public Node(int count) {
+            this.count = count;
+            keys = new LinkedHashSet<Integer>();
+            prev = next = null;
+        }
+    }
 }
 
 /**

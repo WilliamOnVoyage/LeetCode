@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -1304,5 +1305,65 @@ public class Simple_solutions {
 			if (row_0)
 				matrix[row][0] = 0;
 		}
+	}
+
+	// Bucket sort, use bucket's index to represent frequency and it is sorted
+	// naturally
+	public List<Integer> topKFrequent(int[] nums, int k) {
+		List<Integer>[] bucket = new List[nums.length + 1];
+		Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
+
+		for (int n : nums) {
+			frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
+		}
+
+		for (int key : frequencyMap.keySet()) {
+			int frequency = frequencyMap.get(key);
+			if (bucket[frequency] == null) {
+				bucket[frequency] = new ArrayList<>();
+			}
+			bucket[frequency].add(key);
+		}
+
+		List<Integer> res = new ArrayList<>();
+
+		for (int pos = bucket.length - 1; pos >= 0 && res.size() < k; pos--) {
+			if (bucket[pos] != null) {
+				res.addAll(bucket[pos]);
+			}
+		}
+		return res;
+	}
+
+	// Bit manipulation (signed and unsigned is critical)
+	public int reverseBits(int n) {
+		int result = 0;
+		for (int i = 0; i < 32; i++) {
+			result += n & 1;
+			n >>>= 1; // CATCH: must do unsigned shift
+			if (i < 31) // CATCH: for last digit, don't shift!
+				result <<= 1;
+		}
+		return result;
+	}
+
+	public int countPrimes(int n) {
+		boolean[] isPrime = new boolean[n];
+		for (int i = 2; i < n; i++) {
+			isPrime[i] = true;
+		}
+		for (int i = 2; i * i < n; i++) {
+			if (!isPrime[i])
+				continue;
+			for (int j = i * i; j < n; j += i) {
+				isPrime[j] = false;
+			}
+		}
+		int count = 0;
+		for (int i = 2; i < n; i++) {
+			if (isPrime[i])
+				count++;
+		}
+		return count;
 	}
 }
