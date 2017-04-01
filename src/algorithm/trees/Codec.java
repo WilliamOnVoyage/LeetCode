@@ -17,21 +17,13 @@ class TreeNode {
 }
 
 public class Codec {
-	private Queue<TreeNode> q;
-	private TreeNode end;
-	private TreeNode temp_end;
 
 	public Codec() {
-		q = new LinkedList<TreeNode>();
-		end = null;
-		temp_end = null;
+
 	}
 
 	public String serialize(TreeNode root) {
-		end = root;
-		temp_end = root;
-		q.add(root);
-		String s = serialize_node();
+		String s = serialize_node(root);
 		if (s.charAt(0) == ',')
 			s = "[" + s.substring(1) + "]";// remove the initial comma and add
 											// []
@@ -39,7 +31,11 @@ public class Codec {
 		return s;
 	}
 
-	private String serialize_node() {
+	private String serialize_node(TreeNode root) {
+		Queue<TreeNode> q = new LinkedList<TreeNode>();
+		TreeNode end = root;
+		TreeNode temp_end = root;
+		q.add(root);
 		StringBuilder sb = new StringBuilder();
 		while (!q.isEmpty()) {
 			TreeNode node = q.poll();
