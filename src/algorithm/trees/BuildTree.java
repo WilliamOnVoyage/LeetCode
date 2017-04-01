@@ -1,17 +1,6 @@
 package algorithm.trees;
 
 public class BuildTree {
-
-	class TreeNode {
-		int val;
-		TreeNode left;
-		TreeNode right;
-
-		TreeNode(int x) {
-			val = x;
-		}
-	}
-
 	public TreeNode buildTree(int[] preorder, int[] inorder) {
 		if (preorder.length != inorder.length)
 			return null;

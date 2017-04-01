@@ -15,5 +15,10 @@ public class ListNode {
 		this.prev = null;
 		this.next = null;
 	}
+	
+	public ListNode(int val) {
+		this.val = val;
+		this.next = null;
+	}
 
 }
