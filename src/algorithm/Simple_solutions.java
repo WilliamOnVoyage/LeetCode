@@ -1,11 +1,16 @@
 package algorithm;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -1365,5 +1370,298 @@ public class Simple_solutions {
 				count++;
 		}
 		return count;
+	}
+
+	public int[] nextGreaterElement(int[] findNums, int[] nums) {
+		HashMap<Integer, Integer> map = new HashMap<>();
+		Stack<Integer> s = new Stack<>();
+		for (int num : nums) {
+			while (!s.isEmpty() && s.peek() < num) {
+				map.put(s.pop(), num);
+			}
+			s.push(num);
+		}
+		for (int i = 0; i < findNums.length; i++)
+			findNums[i] = map.getOrDefault(findNums[i], -1);
+		return findNums;
+	}
+
+	public int[] nextGreaterElements(int[] nums) {
+		int n = nums.length, next[] = new int[n];
+		Arrays.fill(next, -1);
+		Stack<Integer> stack = new Stack<>(); // index stack
+		for (int i = 0; i < n * 2; i++) {
+			int num = nums[i % n];
+			while (!stack.isEmpty() && nums[stack.peek()] < num)
+				next[stack.pop()] = num;
+			if (i < n)
+				stack.push(i);
+		}
+		return next;
+	}
+
+	public int[] constructRectangle(int area) {
+		double sq = Math.sqrt(area);
+		int L = (int) Math.ceil(sq);
+		int W = (int) Math.floor(sq);
+		while (L * W != area) {
+			if (L * W > area)
+				W--;
+			else
+				L++;
+		}
+		return new int[] { L, W };
+	}
+
+	public int lengthOfLastWord(String s) {
+		String[] words = s.split(" ");
+		if (words.length > 0) {
+			return words[words.length - 1].length();
+		} else {
+			return 0;
+		}
+	}
+
+	public boolean validWordAbbreviation(String word, String abbr) {
+		int i = 0, j = 0;
+		while (i < word.length() && j < abbr.length()) {
+			if (word.charAt(i) == abbr.charAt(j)) {
+				++i;
+				++j;
+				continue;
+			}
+			if (abbr.charAt(j) <= '0' || abbr.charAt(j) > '9') {
+				return false;
+			}
+			int start = j;
+			while (j < abbr.length() && abbr.charAt(j) >= '0' && abbr.charAt(j) <= '9') {
+				++j;
+			}
+			int num = Integer.valueOf(abbr.substring(start, j));
+			i += num;
+		}
+		return i == word.length() && j == abbr.length();
+	}
+
+	private int buffPtr = 0;
+	private int buffCnt = 0;
+	private char[] buff = new char[4];
+
+	public int read(char[] buf, int n) {
+		int ptr = 0;
+		while (ptr < n) {
+			if (buffPtr == 0) {
+				buffCnt = read4(buff);
+			}
+			if (buffCnt == 0)
+				break;
+			while (ptr < n && buffPtr < buffCnt) {
+				buf[ptr++] = buff[buffPtr++];
+			}
+			if (buffPtr >= buffCnt)
+				buffPtr = 0;
+		}
+		return ptr;
+	}
+
+	// just for compilation for read(), no use
+	private int read4(char[] buf) {
+		return 0;
+	}
+
+	public List<String> restoreIpAddresses(String s) {
+		List<String> res = new ArrayList<String>();
+		int len = s.length();
+		for (int i = 1; i < 4 && i < len - 2; i++) {
+			for (int j = i + 1; j < i + 4 && j < len - 1; j++) {
+				for (int k = j + 1; k < j + 4 && k < len; k++) {
+					String s1 = s.substring(0, i), s2 = s.substring(i, j), s3 = s.substring(j, k),
+							s4 = s.substring(k, len);
+					if (isValid(s1) && isValid(s2) && isValid(s3) && isValid(s4)) {
+						res.add(s1 + "." + s2 + "." + s3 + "." + s4);
+					}
+				}
+			}
+		}
+		return res;
+	}
+
+	public boolean isValid(String s) {
+		if (s.length() > 3 || s.length() == 0 || (s.charAt(0) == '0' && s.length() > 1) || Integer.parseInt(s) > 255)
+			return false;
+		return true;
+	}
+
+	class Interval {
+		int start;
+		int end;
+
+		Interval() {
+			start = 0;
+			end = 0;
+		}
+
+		Interval(int s, int e) {
+			start = s;
+			end = e;
+		}
+	}
+
+	public boolean canAttendMeetings(Interval[] intervals) {
+		Arrays.sort(intervals, new Comparator<Interval>() {
+			public int compare(Interval i1, Interval i2) {
+				return i1.start - i2.start;
+			}
+		});
+		for (int i = 1; i < intervals.length; i++) {
+			if (intervals[i].start < intervals[i - 1].end)
+				return false;
+		}
+		return true;
+	}
+
+	// Only for compile
+	class NestedInteger {
+		boolean isInteger() {
+			return true;
+		}
+
+		int getInteger() {
+			return 0;
+		}
+
+		List<NestedInteger> getList() {
+			return new ArrayList<>();
+		}
+	}
+
+	public int depthSumInverse(List<NestedInteger> nestedList) {
+		int unweighted = 0, weighted = 0;
+		while (!nestedList.isEmpty()) {
+			List<NestedInteger> nextLevel = new ArrayList<>();
+			for (NestedInteger ni : nestedList) {
+				if (ni.isInteger())
+					unweighted += ni.getInteger();
+				else
+					nextLevel.addAll(ni.getList());
+			}
+			weighted += unweighted;
+			nestedList = nextLevel;
+		}
+		return weighted;
+	}
+
+	public boolean validTree(int n, int[][] edges) {
+		// initialize n isolated islands
+		int[] nums = new int[n];
+		Arrays.fill(nums, -1);
+
+		// perform union find
+		for (int i = 0; i < edges.length; i++) {
+			int x = find(nums, edges[i][0]);
+			int y = find(nums, edges[i][1]);
+
+			// if two vertices happen to be in the same set
+			// then there's a cycle
+			if (x == y)
+				return false;
+
+			// union
+			nums[x] = y;
+		}
+
+		return edges.length == n - 1;
+	}
+
+	int find(int nums[], int i) {
+		if (nums[i] == -1)
+			return i;
+		return find(nums, nums[i]);
+	}
+
+	public boolean canFinish(int numCourses, int[][] prerequisites) {
+		int[][] matrix = new int[numCourses][numCourses]; // i -> j
+		int[] indegree = new int[numCourses];
+
+		for (int i = 0; i < prerequisites.length; i++) {
+			int end = prerequisites[i][0];
+			int start = prerequisites[i][1];
+			if (matrix[start][end] == 0)
+				indegree[end]++; // duplicate case
+			matrix[start][end] = 1;
+		}
+
+		int count = 0;
+		Queue<Integer> queue = new LinkedList<Integer>();
+		for (int i = 0; i < indegree.length; i++) {
+			if (indegree[i] == 0)
+				queue.offer(i);
+		}
+		while (!queue.isEmpty()) {
+			int end = queue.poll();
+			count++;
+			for (int i = 0; i < numCourses; i++) {
+				if (matrix[end][i] != 0) {
+					if (--indegree[i] == 0)
+						queue.offer(i);
+				}
+			}
+		}
+		return count == numCourses;
+	}
+
+	class codedString {
+		int num;
+		String str;
+
+		codedString(int n, String s) {
+			num = n;
+			str = s;
+		}
+	}
+
+	public String decodeString(String s) {
+		String result = "";
+		Stack<Integer> count = new Stack<>();
+		Stack<String> strs = new Stack<>();
+		for (int i = 0; i < s.length();) {
+			if (Character.isDigit(s.charAt(i))) {
+				int c = 0;
+				while (Character.isDigit(s.charAt(i))) {
+					c = c * 10 + (s.charAt(i) - '0');
+					i++;
+				}
+				count.push(c);
+			} else {
+				if (s.charAt(i) == '[') {
+					strs.push(result);
+					result = "";
+				} else if (s.charAt(i) == ']') {
+					StringBuilder sb = new StringBuilder(strs.pop());
+					int max = count.pop();
+					for (int j = 0; j < max; j++) {
+						sb.append(result);
+					}
+					result = sb.toString();
+				} else {
+					result += s.charAt(i);
+
+				}
+				i++;
+			}
+		}
+		return result;
+	}
+
+	public int minMoves(int[] nums) {
+		if (nums.length == 0)
+			return 0;
+		int min = nums[0];
+		for (int n : nums)
+			min = Math.min(min, n);
+		int res = 0;
+		for (int n : nums)
+			res += n - min;
+		return res;
 	}
 }
