@@ -1366,4 +1366,30 @@ public class Simple_solutions {
 		}
 		return count;
 	}
+
+	public int nextGreaterElement(int n) {
+		int[] bits = new int[32];
+		int index = 0;
+		while (n > 0) {
+			bits[index] = n % 10;
+			n /= 10;
+			index++;
+		}
+		for (int i = 1; i < index; i++) {
+			for (int j = 0; j < i; j++) {
+				if (bits[j] < bits[i]) {
+					int low = bits[j];
+					bits[j] = bits[i];
+					bits[i] = low;
+					int result = 0;
+					for (int k = index - 1; k >= 0; k--) {
+						result *= 10;
+						result = result + bits[k];
+					}
+					return result;
+				}
+			}
+		}
+		return -1;
+	}
 }
