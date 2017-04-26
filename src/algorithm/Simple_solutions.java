@@ -1704,4 +1704,32 @@ public class Simple_solutions {
 			sb.append(1);
 		return sb.reverse().toString();
 	}
+
+	public int longestPalindrome2(String s) {
+		int length = 0;
+		int[] cmap = new int[128];
+		char[] ch = s.toCharArray();
+		for (char c : ch) {
+			cmap[c]++;
+			if (cmap[c] >= 2) {
+				cmap[c] -= 2;
+				length += 2;
+			}
+		}
+		for (int i : cmap) {
+			if (i == 1) {
+				length++;
+				break;
+			}
+		}
+		return length;
+	}
+
+	public boolean isPowerOfFour(int num) {
+		double x = Math.log(num) / Math.log(2);
+		if (x == (int) x)
+			return num > 0 && x % 2 == 0;
+		return false;
+	}
+
 }
