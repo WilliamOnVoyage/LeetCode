@@ -12,11 +12,17 @@ public class ReverseLinkedList {
 			prev = prev.next;
 			index++;
 		}
-//		node = node.next;
-//		index++;
-		while (index != n) {
+		ListNode tail = node;
+		node = node.next;
+		index++;
+		while (index <= n && node != null) {
 			ListNode next = node.next;
-			
+			ListNode prevhead = prev.next;
+			prev.next = node;
+			tail.next = next;
+			node.next = prevhead;
+			index++;
+			node = next;
 		}
 		return dummy.next;
 	}
