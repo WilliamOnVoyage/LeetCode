@@ -1,5 +1,7 @@
 package algorithm.linklist;
 
+import java.util.*;
+
 public class ReverseLinkedList {
 	public ListNode reverseBetween(ListNode head, int m, int n) {
 		int index = 1;
@@ -12,19 +14,13 @@ public class ReverseLinkedList {
 			prev = prev.next;
 			index++;
 		}
-		ListNode tail = node;
-		node = node.next;
-		index++;
-		while (index <= n && node != null) {
+		// node = node.next;
+		// index++;
+		while (index != n) {
 			ListNode next = node.next;
-			ListNode prevhead = prev.next;
-			prev.next = node;
-			tail.next = next;
-			node.next = prevhead;
-			index++;
-			node = next;
+
 		}
 		return dummy.next;
 	}
-
 }
+
