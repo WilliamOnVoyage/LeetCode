@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 eclipse.preferences.version=1
 encoding//src/algorithm/sortAndsearh/HeapSort.java=UTF-8
+=======
+eclipse.preferences.version=1
+encoding//src/algorithm/sortAndsearh/HeapSort.java=UTF-8
+>>>>>>> branch 'master' of https://github.com/WilliamOnVoyage/LeetCode.git

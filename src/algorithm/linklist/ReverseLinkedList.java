@@ -1,3 +1,4 @@
+
 package algorithm.linklist;
 
 import java.util.*;
@@ -23,4 +24,3 @@ public class ReverseLinkedList {
 		return dummy.next;
 	}
 }
-

@@ -1,3 +1,4 @@
+
 package algorithm.linklist;
 
 public class PartitionList {

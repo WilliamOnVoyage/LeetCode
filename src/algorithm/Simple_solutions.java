@@ -1683,6 +1683,7 @@ public class Simple_solutions {
 		return res;
 	}
 
+
 	public String addStrings(String num1, String num2) {
 		String s1 = new StringBuilder(num1).reverse().toString();
 		String s2 = new StringBuilder(num2).reverse().toString();
