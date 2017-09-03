@@ -1,4 +1,3 @@
-
 package algorithm.linklist;
 
 import java.util.*;
@@ -6,21 +5,21 @@ import java.util.*;
 public class ReverseLinkedList {
 	public ListNode reverseBetween(ListNode head, int m, int n) {
 		int index = 1;
-		ListNode dummy = new ListNode(-1);
-		dummy.next = head;
-		ListNode prev = dummy;
+		ListNode dummyHead = new ListNode(-1);
+		dummyHead.next = head;
+		ListNode prev = dummyHead;
 		ListNode node = head;
 		while (index != m) {
 			node = node.next;
 			prev = prev.next;
 			index++;
 		}
-		// node = node.next;
-		// index++;
 		while (index != n) {
 			ListNode next = node.next;
-
+			prev.next = next;
+			next.next = node;
+			
 		}
-		return dummy.next;
+		return dummyHead.next;
 	}
 }

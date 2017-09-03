@@ -3,46 +3,46 @@ package algorithm.graph;
 
 public class UnionFindSols {
 	class UnionFind {
-		private int[] parent;
-		private int[] rank;
-		private int count;
+		private int[] vertexParents;
+		private int[] vertexRank;
+		private int componentCount;
 
 		public UnionFind(int n) {
-			parent = new int[n];
-			rank = new int[n];
-			count = n;
+			vertexParents = new int[n];
+			vertexRank = new int[n];
+			componentCount = n;
 
 			for (int i = 0; i < n; i++) {
-				parent[i] = i;
+				vertexParents[i] = i;
 			}
 		}
 
 		public int find(int q) {
-			while (q != parent[q]) {
-				parent[q] = parent[parent[q]];
-				q = parent[q];
+			while (q != vertexParents[q]) {
+				vertexParents[q] = vertexParents[vertexParents[q]];
+				q = vertexParents[q];
 			}
 			return q;
 		}
 
 		public void union(int p, int q) {
-			int p_p = find(p);
-			int q_p = find(q);
-			if (p_p != q_p) {
-				if (rank[q] > rank[q]) {
-					parent[p_p] = q_p;
+			int pParent = find(p);
+			int qParent = find(q);
+			if (pParent != qParent) {
+				if (vertexRank[q] > vertexRank[q]) {
+					vertexParents[pParent] = qParent;
 				} else {
-					parent[q_p] = p_p;
-					if (rank[q] == rank[p]) {
-						rank[q]++;
+					vertexParents[qParent] = pParent;
+					if (vertexRank[q] == vertexRank[p]) {
+						vertexRank[q]++;
 					}
 				}
-				count--;
+				componentCount--;
 			}
 		}
 
-		public int get_count() {
-			return count;
+		public int getComponentCount() {
+			return componentCount;
 		}
 	}
 
@@ -51,7 +51,7 @@ public class UnionFindSols {
 		for (int[] edge : edges) {
 			uf.union(edge[0], edge[1]);
 		}
-		return uf.get_count();
+		return uf.getComponentCount();
 	}
 
 }
