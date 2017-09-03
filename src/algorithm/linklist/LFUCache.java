@@ -4,7 +4,6 @@ import java.util.*;
 
 public class LFUCache {
 
-
 	private int cap;
 	private HashMap<Integer, Nodes> freq_map;
 	private HashMap<Integer, Integer> key_map;

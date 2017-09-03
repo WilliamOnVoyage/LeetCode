@@ -30,7 +30,7 @@ public class LongestSubstring {
 		}
 		return end - start;
 	}
-	
+
 	// public int longestSubstring(String s, int k) {
 	// char[] str = s.toCharArray();
 	// int[] counts = new int[26];

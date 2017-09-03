@@ -9,16 +9,16 @@ public class ValidSudoku {
 	}
 
 	private boolean checkRowCol(char[][] board) {
-		int[][] rows = new int[board.length][9];
-		int[][] cols = new int[board.length][9];
+		int[][] row_map = new int[board.length][9];
+		int[][] col_map = new int[board.length][9];
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[row].length; col++) {
 				if (board[row][col] != '.') {
-					if (rows[row][board[row][col] - initial] > 0 || cols[col][board[row][col] - initial] > 0) {
+					if (row_map[row][board[row][col] - ini] > 0 || col_map[col][board[row][col] - ini] > 0) {
 						return false;
 					}
-					rows[row][board[row][col] - initial]++;
-					cols[col][board[row][col] - initial]++;
+					row_map[row][board[row][col] - ini]++;
+					col_map[col][board[row][col] - ini]++;
 				}
 			}
 		}
@@ -32,9 +32,9 @@ public class ValidSudoku {
 				for (int r = row; r < row + 3; r++) {
 					for (int c = col; c < col + 3; c++) {
 						if (board[r][c] != '.') {
-							if (map[board[r][c] - initial] > 0)
+							if (map[board[r][c] - ini] > 0)
 								return false;
-							map[board[r][c] - initial]++;
+							map[board[r][c] - ini]++;
 						}
 					}
 				}
@@ -43,33 +43,33 @@ public class ValidSudoku {
 		return true;
 	}
 
-	private final char initial = '1';
+	private final char ini = '1';
 	private final char[] sets = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	public void solveSudoku(char[][] board) {
-		List<HashSet<Character>> rows = new ArrayList<>(9);
+		List<HashSet<Character>> row_map = new ArrayList<>(9);
 		for (int i = 0; i < 9; i++) {
-			rows.add(new HashSet<Character>());
+			row_map.add(new HashSet<Character>());
 		}
-		List<HashSet<Character>> cols = new ArrayList<>(9);
+		List<HashSet<Character>> col_map = new ArrayList<>(9);
 		for (int i = 0; i < 9; i++) {
-			cols.add(new HashSet<Character>());
+			col_map.add(new HashSet<Character>());
 		}
-		List<HashSet<Character>> mats = new ArrayList<>(9);
+		List<HashSet<Character>> mat_map = new ArrayList<>(9);
 		for (int i = 0; i < 9; i++) {
-			mats.add(new HashSet<Character>());
+			mat_map.add(new HashSet<Character>());
 		}
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[row].length; col++) {
 				if (board[row][col] >= '0') {
-					int matIndex = (row / 3) * 3 + col / 3;
-					rows.get(row).add(board[row][col]);
-					cols.get(col).add(board[row][col]);
-					mats.get(matIndex).add(board[row][col]);
+					int mat_index = (row / 3) * 3 + col / 3;
+					row_map.get(row).add(board[row][col]);
+					col_map.get(col).add(board[row][col]);
+					mat_map.get(mat_index).add(board[row][col]);
 				}
 			}
 		}
-		fillSudoku(board, rows, cols, mats);
+		fillSudoku(board, row_map, col_map, mat_map);
 	}
 
 	private boolean fillSudoku(char[][] board, List<HashSet<Character>> row_map, List<HashSet<Character>> col_map, List<HashSet<Character>> mat_map) {

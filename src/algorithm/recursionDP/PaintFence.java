@@ -1,4 +1,3 @@
-
 package algorithm.recursionDP;
 
 public class PaintFence {
@@ -17,6 +16,4 @@ public class PaintFence {
 		}
 		return (diff + same);
 	}
-	
-	
 }

@@ -1,4 +1,3 @@
-
 package algorithm.trees;
 
 public class DeleteNodeBST {
@@ -30,5 +29,4 @@ public class DeleteNodeBST {
 		}
 		return node;
 	}
-
 }
